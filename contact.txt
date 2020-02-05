@@ -1,0 +1,5 @@
+Roles & Contacts
+    UX Designer & Project Manager: Sunny Sun kecheng@uw.edu
+    Software Engineer: Scott Mo xingym2@uw.edu
+    Software Engineer: Charlene Chen manjic@uw.edu
+    Data Engineer: Wenjun Chen wenjuc@uw.edu

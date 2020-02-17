@@ -1,0 +1,72 @@
+.navbar{
+    top: 0px;
+    left: 0px;
+    height: 75px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #0000004D;
+    opacity: 1;
+}
+
+#nav-item-1{
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0;
+    color: #6C6C6C;
+    opacity: 1;
+}
+
+#nav-item-2{
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0;
+    color: #6C6C6C;
+    opacity: 1;
+}
+
+#nav-item-3{
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0;
+    color: #6C6C6C;
+    opacity: 1;
+}
+
+#banner{
+    height: 90vh;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    background: transparent url('../img/background.jpg') 0% 0% no-repeat padding-box;
+    opacity: 0.7;
+    background-size: 100vw 100vh;
+    font-weight: bold;
+}
+
+h1 {
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0;
+    color: #000000;
+    opacity: 1;
+    padding-left: 7vw;
+    padding-bottom: 2vh;
+}
+
+p {
+    width: 40vw;
+    padding-left: 7vw;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    padding-bottom: 2vh;
+}
+
+#get-zero-button{
+    padding-left: 7vw;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+#download-button{
+    background-color: white;
+    color: #000000;
+    border-radius: 15px;
+    box-shadow: 0px 4px 6px #00000029;
+}

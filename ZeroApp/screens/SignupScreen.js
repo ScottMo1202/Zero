@@ -6,7 +6,7 @@ import GradientButton from 'react-native-gradient-buttons';
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 
-export default class HomeScreen extends React.Component {
+export default class SignUpScreen extends React.Component {
   constructor(props) {
     super(props)
   }

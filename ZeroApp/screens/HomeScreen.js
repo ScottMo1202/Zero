@@ -2,6 +2,9 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import GradientButton from 'react-native-gradient-buttons';
+import ValidationComponent from 'react-native-form-validator'
+import { emailValidator } from '../components/EmailValidate'
+import { emailConstraints } from '../components/EmailConstraints'
 
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
@@ -9,6 +12,14 @@ import { PasswordInput } from '../components/PasswordInput';
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {firstName: '', lastName: '', email: '', password: ''}
+    // this.signUpCallback = this.signUpCallback.bind(this)
+  }
+  emailCallback = (email) => {
+    this.setState({...this.state, email: email})
+  }
+  passwordCallback = (password) => {
+    this.setState({...this.state, password: password})
   }
   render() {
     return (
@@ -50,10 +61,10 @@ export default class HomeScreen extends React.Component {
             </TextInput>
         </View>
         <View style={styles.emailContainer}>
-          <EmailInput></EmailInput>
+          <EmailInput emailCallback={this.emailCallback}></EmailInput>
         </View>
         <View style={styles.passWordContainer}>
-          <PasswordInput></PasswordInput>
+          <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
         </View>
         <View style={styles.alreadyContainer}
         >
@@ -151,6 +162,7 @@ const styles = StyleSheet.create({
      paddingLeft: 78,
      paddingRight: 78,
      fontSize: 12,
+     fontFamily: 'sofia-pro',
      color: '#7E7676',
      textAlign: 'center',
      lineHeight: 22

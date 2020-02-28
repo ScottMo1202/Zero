@@ -6,11 +6,38 @@ import GradientButton from 'react-native-gradient-buttons';
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 
-export default class LoginScreen extends React.Component {
+export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {email: '', 
+                  password: '',
+                  goodEmail: true}
+    this.emailCallback = this.emailCallback.bind(this)
+    this.passwordCallback = this.passwordCallback.bind(this)
+
+  }
+  emailCallback = (email) => {
+    this.setState({...this.state, email: email})
+  }
+  passwordCallback = (password) => {
+    this.setState({...this.state, password: password})
+  }
+  onLogin(email, password) {
+    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(emailReg.test(email) === false) {
+      this.setState({goodEmail: false})
+    } else {
+      this.setState({goodEmail: true})
+    }
+    if(password === '') {
+      this.setState({goodPassword: false})
+    } else {
+      this.setState({goodPassword: true})
+    }
   }
   render() {
+    const emailError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid email!</Text>
+    const passwordError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid password!</Text>
     return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -20,10 +47,12 @@ export default class LoginScreen extends React.Component {
           >Login in to Zero</Text>
         </View>
         <View style={styles.emailContainer}>
-          <EmailInput></EmailInput>
+          <EmailInput emailCallback={this.emailCallback}></EmailInput>
+          {this.state.goodEmail ? null : emailError}
         </View>
         <View style={styles.passWordContainer}>
-          <PasswordInput></PasswordInput>
+          <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
+          {this.state.goodEmail ? null : passwordError}
         </View>
         <View style={styles.signUpContainer}
         >
@@ -47,9 +76,10 @@ export default class LoginScreen extends React.Component {
             gradientBegin="#F7DBC9"
             gradientEnd='#F79E8E'
             gradientDirection="vertical"
-            text="Join Now"
+            text="Log in"
             radius = {15}
             textStyle={styles.loginText}
+            onPressAction={() => this.onLogin(this.state.email, this.state.password)}
             >
           </GradientButton>
         </View>
@@ -62,39 +92,6 @@ export default class LoginScreen extends React.Component {
 HomeScreen.navigationOptions = {
   header: null,
 };
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use useful development
-        tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/get-started/create-a-new-app/#making-your-first-change'
-  );
-}
 
 const styles = StyleSheet.create({
     container: {

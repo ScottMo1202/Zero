@@ -1,19 +1,21 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as WebBrowser from 'expo-web-browser';
 import GradientButton from 'react-native-gradient-buttons';
-import ValidationComponent from 'react-native-form-validator'
-import { emailValidator } from '../components/EmailValidate'
-import { emailConstraints } from '../components/EmailConstraints'
-
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {firstName: '', lastName: '', email: '', password: ''}
-    // this.signUpCallback = this.signUpCallback.bind(this)
+    this.state = {email: '', 
+                  password: '',
+                  goodEmail: true,
+                  goodPassword: true}
+    this.emailCallback = this.emailCallback.bind(this)
+    this.passwordCallback = this.passwordCallback.bind(this)
+
   }
   emailCallback = (email) => {
     this.setState({...this.state, email: email})
@@ -21,71 +23,64 @@ export default class HomeScreen extends React.Component {
   passwordCallback = (password) => {
     this.setState({...this.state, password: password})
   }
+  onLogin(email, password) {
+    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(emailReg.test(email) === false) {
+      this.setState({goodEmail: false})
+    } else {
+      this.setState({goodEmail: true})
+    }
+    if(password === '') {
+      this.setState({goodPassword: false})
+    } else {
+      this.setState({goodPassword: true})
+    }
+  }
   render() {
+    const emailError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid email!</Text>
+    const passwordError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid password!</Text>
     return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <View style={styles.titleContainer}>
           <Text
             style={styles.titleText}
-          >Become a Zero member</Text>
-        </View>
-        <View style={styles.firstNameContainer}>
-          <TextInput
-              style = {{
-                  backgroundColor: '#FFFFFF',
-                  height: 50,
-                  borderWidth: 1,
-                  borderRadius: 15,
-                  paddingLeft: 16,
-                  borderColor: '#F79E8E'
-              }}
-              placeholder = "First Name"
-              placeholderTextColor = '#7E7676'
-          >
-          </TextInput>
-        </View>
-        <View style={styles.lastNameContainer}>
-          <TextInput
-                style = {{
-                    backgroundColor: '#FFFFFF',
-                    height: 50,
-                    borderWidth: 1,
-                    borderRadius: 15,
-                    paddingLeft: 16,
-                    borderColor: '#F79E8E'
-                }}
-                placeholder = "Last Name"
-                placeholderTextColor = '#7E7676'
-            >
-            </TextInput>
+          >Login in to Zero</Text>
         </View>
         <View style={styles.emailContainer}>
           <EmailInput emailCallback={this.emailCallback}></EmailInput>
+          {this.state.goodEmail ? null : emailError}
         </View>
         <View style={styles.passWordContainer}>
           <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
+          {this.state.goodPassword ? null : passwordError}
         </View>
-        <View style={styles.alreadyContainer}
+        <View style={styles.signUpContainer}
         >
           <Button 
-            title='Already have an account'
+            title='New to Zero'
             color='#7e7676'
             type='clear'
           />
         </View>
-        <Text style={styles.agreeTerms}>
-                By creating an account you agree to our Terms of Service and Private Policy
-        </Text>
-        <View style={styles.joinContainer}>
+        <View style={styles.forgotContainer}
+        >
+          <Button 
+            title='Forget your password'
+            color='#7e7676'
+            type='clear'
+          />
+        </View>
+        <View style={styles.loginContainer}>
           <GradientButton
-            style={styles.joinScreenButton}
+            style={styles.loginScreenButton}
             gradientBegin="#F7DBC9"
             gradientEnd='#F79E8E'
             gradientDirection="vertical"
-            text="Join Now"
+            text="Log in"
             radius = {15}
-            textStyle={styles.joinText}
+            textStyle={styles.loginText}
+            onPressAction={() => this.onLogin(this.state.email, this.state.password)}
             >
           </GradientButton>
         </View>
@@ -106,28 +101,18 @@ const styles = StyleSheet.create({
       
     },
     titleContainer: {
-      paddingTop: 154,
+      paddingTop: 219,
       paddingLeft: 24
     },
     titleText: {
       color: '#F79E8E',
       fontSize: 24,
-      width: 265,
+      width: 200,
       height: 33,
       fontWeight: 'bold'
     },
-    firstNameContainer: {
-      paddingTop: 50,
-      paddingLeft: 24,
-      paddingRight: 24
-    },
-    lastNameContainer: {
-      paddingTop: 16,
-      paddingLeft: 24,
-      paddingRight: 24
-    },
    emailContainer: {
-    paddingTop: 16,
+    paddingTop: 50,
     paddingLeft: 24,
     paddingRight: 24
    }, 
@@ -136,35 +121,30 @@ const styles = StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24
    },
-   joinContainer: {
-    paddingTop: 28,
+   loginContainer: {
+    paddingTop: 144,
     paddingLeft: 43,
    },
-   joinText: {
+   loginText: {
     color:'#fff',
     textAlign:'center',
     paddingTop: 17,
     fontSize: 18,
     paddingBottom: 17
    },
-   joinScreenButton: {
+   loginScreenButton: {
     width: 327,
     height: 50,
     opacity: 100
    },
-   alreadyContainer: {
+   signUpContainer: {
       paddingTop: 30,
-      paddingLeft: 97,
-      paddingRight: 97,
+      paddingLeft: 144,
+      paddingRight: 144,
    },
-   agreeTerms: {
-     paddingTop: 47,
-     paddingLeft: 78,
-     paddingRight: 78,
-     fontSize: 12,
-     fontFamily: 'sofia-pro',
-     color: '#7E7676',
-     textAlign: 'center',
-     lineHeight: 22
+   forgotContainer: {
+     paddingTop: 0,
+     paddingLeft: 109,
+     paddingRight: 109
    }
 });

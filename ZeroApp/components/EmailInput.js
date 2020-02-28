@@ -11,9 +11,7 @@ export class EmailInput extends React.Component {
         this.props.emailCallback(email)
     }
     render() {
-        // const [email, onChangeText] = React.useState('')
         return (
-            
                 <TextInput
                     style = {{
                         backgroundColor: '#FFFFFF',

@@ -25,6 +25,7 @@ export class PasswordInput extends React.Component {
                 }}
                 placeholder = "Password"
                 placeholderTextColor = '#7E7676'
+                secureTextEntry
                 onChangeText = {(password) => this.handleChange(password)} 
                 value={this.state.password}
             >

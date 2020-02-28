@@ -2,18 +2,21 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import GradientButton from 'react-native-gradient-buttons';
-import ValidationComponent from 'react-native-form-validator'
-import { emailValidator } from '../components/EmailValidate'
-import { emailConstraints } from '../components/EmailConstraints'
 
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 
-export default class HomeScreen extends React.Component {
+export default class SignupScreen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {firstName: '', lastName: '', email: '', password: ''}
-    // this.signUpCallback = this.signUpCallback.bind(this)
+    this.state = {firstName: '',
+                  lastName: '', 
+                  email: '', 
+                  password: '',
+                  goodFirstName: true,
+                  goodLastName: true,
+                  goodEmail: true,
+                  goodPassword: true}
   }
   emailCallback = (email) => {
     this.setState({...this.state, email: email})
@@ -21,7 +24,37 @@ export default class HomeScreen extends React.Component {
   passwordCallback = (password) => {
     this.setState({...this.state, password: password})
   }
+  onJoin(email, firstName, lastName, password) {
+    this.validateForm(email, firstName, lastName, password)
+  }
+  validateForm(email, firstName, lastName, password) {
+    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(emailReg.test(email) === false) {
+      this.setState({...this.state, goodEmail: false})
+    } else {
+      this.setState({...this.state, goodEmail: true})
+    }
+    if(firstName === '') {
+      this.setState({goodFirstName: false})
+    } else {
+      this.setState({goodFirstName: true})
+    }
+    if(lastName === '') {
+      this.setState({goodLastName: false})
+    } else {
+      this.setState({goodLastName: true})
+    }
+    if(password === '') {
+      this.setState({goodPassword: false})
+    } else {
+      this.setState({goodPassword: true})
+    }
+  }
   render() {
+    const firstNameError = <Text style={{paddingLeft: 6, color: 'red'}}>The first name is required!</Text>
+    const lastNameError = <Text style={{paddingLeft: 6, color: 'red'}}>The last name is required!</Text>
+    const emailError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid email!</Text>
+    const passwordError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid password!</Text>
     return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -42,8 +75,11 @@ export default class HomeScreen extends React.Component {
               }}
               placeholder = "First Name"
               placeholderTextColor = '#7E7676'
+              onChangeText = {(firstName) => {this.setState({...this.state, firstName: firstName})}}
+              value = {this.state.firstName}
           >
           </TextInput>
+          {this.state.goodFirstName ? null : firstNameError}
         </View>
         <View style={styles.lastNameContainer}>
           <TextInput
@@ -57,14 +93,19 @@ export default class HomeScreen extends React.Component {
                 }}
                 placeholder = "Last Name"
                 placeholderTextColor = '#7E7676'
+                onChangeText = {(lastName) => {this.setState({...this.state, lastName: lastName})}}
+                value = {this.state.lastName}
             >
             </TextInput>
+            {this.state.goodLastName ? null : lastNameError}
         </View>
         <View style={styles.emailContainer}>
           <EmailInput emailCallback={this.emailCallback}></EmailInput>
+          {this.state.goodEmail ? null : emailError}
         </View>
         <View style={styles.passWordContainer}>
           <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
+          {this.state.goodPassword ? null : passwordError}
         </View>
         <View style={styles.alreadyContainer}
         >
@@ -86,6 +127,7 @@ export default class HomeScreen extends React.Component {
             text="Join Now"
             radius = {15}
             textStyle={styles.joinText}
+            onPressAction={() => this.onJoin(this.state.email, this.state.firstName, this.state.lastName, this.state.password)}
             >
           </GradientButton>
         </View>
@@ -137,7 +179,7 @@ const styles = StyleSheet.create({
     paddingRight: 24
    },
    joinContainer: {
-    paddingTop: 28,
+    paddingTop: 0,
     paddingLeft: 43,
    },
    joinText: {

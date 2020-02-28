@@ -67,14 +67,7 @@ export default class HomeScreen extends React.Component {
         </View>
         <View style={styles.firstNameContainer}>
           <TextInput
-              style = {{
-                  backgroundColor: '#FFFFFF',
-                  height: 50,
-                  borderWidth: 1,
-                  borderRadius: 15,
-                  paddingLeft: 16,
-                  borderColor: '#F79E8E'
-              }}
+              style = {styles.generalInput}
               placeholder = "First Name"
               placeholderTextColor = '#7E7676'
               onChangeText = {(firstName) => {this.setState({...this.state, firstName: firstName})}}
@@ -85,14 +78,7 @@ export default class HomeScreen extends React.Component {
         </View>
         <View style={styles.lastNameContainer}>
           <TextInput
-                style = {{
-                    backgroundColor: '#FFFFFF',
-                    height: 50,
-                    borderWidth: 1,
-                    borderRadius: 15,
-                    paddingLeft: 16,
-                    borderColor: '#F79E8E'
-                }}
+                style = {styles.generalInput}
                 placeholder = "Last Name"
                 placeholderTextColor = '#7E7676'
                 onChangeText = {(lastName) => {this.setState({...this.state, lastName: lastName})}}
@@ -211,5 +197,13 @@ const styles = StyleSheet.create({
      color: '#7E7676',
      textAlign: 'center',
      lineHeight: 22
+   },
+   generalInput: {
+    backgroundColor: '#FFFFFF',
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 15,
+    paddingLeft: 16,
+    borderColor: '#F79E8E'
    }
 });

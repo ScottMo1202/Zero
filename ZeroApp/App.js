@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // import BottomTabNavigator from './navigation/BottomTabNavigator';
 import HomeScreen from './screens/HomeScreen';
+import SignupScreen from './screens/SignupScreen'
 import LoginScreen from './screens/LoginScreen'
 import useLinking from './navigation/useLinking';
 
@@ -54,7 +55,8 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Signup" component={HomeScreen} />
+            <Stack.Screen name="test" component={HomeScreen}/>
+            <Stack.Screen name="Signup" component={SignupScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
           </Stack.Navigator>
         </NavigationContainer>

@@ -9,9 +9,12 @@ import { PasswordInput } from '../components/PasswordInput';
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {email: '', 
-                  password: '',
-                  goodEmail: true}
+    this.state = {
+      email: '', 
+      password: '',
+      goodEmail: true, 
+      goodPassword: true
+    }
     this.emailCallback = this.emailCallback.bind(this)
     this.passwordCallback = this.passwordCallback.bind(this)
 
@@ -52,7 +55,7 @@ export default class HomeScreen extends React.Component {
         </View>
         <View style={styles.passWordContainer}>
           <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
-          {this.state.goodEmail ? null : passwordError}
+          {this.state.goodPassword ? null : passwordError}
         </View>
         <View style={styles.signUpContainer}
         >

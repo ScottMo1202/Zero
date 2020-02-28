@@ -1,213 +1,122 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, DatePickerIOS, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import DatePicker from 'react-native-datepicker'
 import GradientButton from 'react-native-gradient-buttons';
-
-import { EmailInput } from '../components/EmailInput';
-import { PasswordInput } from '../components/PasswordInput';
+import { render } from 'react-dom';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {firstName: '',
-                  lastName: '', 
-                  email: '', 
-                  password: '',
-                  goodFirstName: true,
-                  goodLastName: true,
-                  goodEmail: true,
-                  goodPassword: true}
-  }
-  emailCallback = (email) => {
-    this.setState({...this.state, email: email})
-  }
-  passwordCallback = (password) => {
-    this.setState({...this.state, password: password})
-  }
-  onJoin(email, firstName, lastName, password) {
-    this.validateForm(email, firstName, lastName, password)
-  }
-  validateForm(email, firstName, lastName, password) {
-    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
-    if(emailReg.test(email) === false) {
-      this.setState({...this.state, goodEmail: false})
-    } else {
-      this.setState({...this.state, goodEmail: true})
-    }
-    if(firstName === '') {
-      this.setState({goodFirstName: false})
-    } else {
-      this.setState({goodFirstName: true})
-    }
-    if(lastName === '') {
-      this.setState({goodLastName: false})
-    } else {
-      this.setState({goodLastName: true})
-    }
-    if(password === '') {
-      this.setState({goodPassword: false})
-    } else {
-      this.setState({goodPassword: true})
+    this.state = {
+      title: '',
+      purchaseDate: '',
+      expireDate: '',
+      category: '',
+      note: '',
+      showPurchaseDatePicker: false,
+      showExpireDatePicker: false
     }
   }
   render() {
-    const firstNameError = <Text style={{paddingLeft: 6, color: 'red'}}>The first name is required!</Text>
-    const lastNameError = <Text style={{paddingLeft: 6, color: 'red'}}>The last name is required!</Text>
-    const emailError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid email!</Text>
-    const passwordError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid password!</Text>
+    let moment = require('moment')
+    let purchaseDatepicker = this.state.showPurchaseDatePicker ? 
+                      <DatePickerIOS style={{ height: 150 }}
+                                    mode="date"
+                                    date={this.state.purchaseDate === '' ? new Date() : this.state.purchaseDate}
+                                    onDateChange={(purchaseDate) => this.setState({purchaseDate})}/> : null
+    let expireDatepicker= this.state.showExpireDatePicker ? 
+                      <DatePickerIOS style={{ height: 150 }}
+                                    mode="date"
+                                    date={this.state.expireDate === '' ? new Date() : this.state.expireDate}
+                                    onDateChange={(expireDate) => this.setState({expireDate})}/> : null
     return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.titleContainer}>
-          <Text
-            style={styles.titleText}
-          >Become a Zero member</Text>
-        </View>
-        <View style={styles.firstNameContainer}>
-          <TextInput
-              style = {{
-                  backgroundColor: '#FFFFFF',
-                  height: 50,
-                  borderWidth: 1,
-                  borderRadius: 15,
-                  paddingLeft: 16,
-                  borderColor: '#F79E8E'
-              }}
-              placeholder = "First Name"
-              placeholderTextColor = '#7E7676'
-              onChangeText = {(firstName) => {this.setState({...this.state, firstName: firstName})}}
-              value = {this.state.firstName}
-          >
-          </TextInput>
-          {this.state.goodFirstName ? null : firstNameError}
-        </View>
-        <View style={styles.lastNameContainer}>
-          <TextInput
-                style = {{
-                    backgroundColor: '#FFFFFF',
-                    height: 50,
-                    borderWidth: 1,
-                    borderRadius: 15,
-                    paddingLeft: 16,
-                    borderColor: '#F79E8E'
-                }}
-                placeholder = "Last Name"
-                placeholderTextColor = '#7E7676'
-                onChangeText = {(lastName) => {this.setState({...this.state, lastName: lastName})}}
-                value = {this.state.lastName}
-            >
-            </TextInput>
-            {this.state.goodLastName ? null : lastNameError}
-        </View>
-        <View style={styles.emailContainer}>
-          <EmailInput emailCallback={this.emailCallback}></EmailInput>
-          {this.state.goodEmail ? null : emailError}
-        </View>
-        <View style={styles.passWordContainer}>
-          <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
-          {this.state.goodPassword ? null : passwordError}
-        </View>
-        <View style={styles.alreadyContainer}
-        >
-          <Button 
-            title='Already have an account'
-            color='#7e7676'
-            type='clear'
-            onPress={() => {this.props.navigation.navigate('Login')}}
-          />
-        </View>
-        <Text style={styles.agreeTerms}>
-                By creating an account you agree to our Terms of Service and Private Policy
-        </Text>
-        <View style={styles.joinContainer}>
-          <GradientButton
-            style={styles.joinScreenButton}
-            gradientBegin="#F7DBC9"
-            gradientEnd='#F79E8E'
-            gradientDirection="vertical"
-            text="Join Now"
-            radius = {15}
-            textStyle={styles.joinText}
-            onPressAction={() => this.onJoin(this.state.email, this.state.firstName, this.state.lastName, this.state.password)}
-            >
-          </GradientButton>
-        </View>
-      </ScrollView>
-    </View>
-  );
+      <View style={styles.container}>
+        <ScrollView style={styles.container}>
+          <View style={styles.topicContainer}>
+            <Text
+              style={styles.topicText}
+            >Record a new entry</Text>
+          </View>
+          <View style={styles.titleContainer}>
+              <TextInput
+                  style = {styles.generalInput}
+                  placeholder = "Title"
+                  placeholderTextColor = '#7E7676'
+                  onChangeText = {(title) => {this.setState({...this.state, title: title})}}
+                  value = {this.state.title}
+              >
+              </TextInput>
+          </View>
+          <View style={styles.generalInputContainer}>
+              <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showPurchaseDatePicker: !this.state.showPurchaseDatePicker})}>
+                  <Text style={{color: '#7E7676', paddingTop: 16}}>{this.state.purchaseDate === '' ? 'Date of purchase' : moment(this.state.purchaseDate).format('MM/DD/YYYY')}</Text>
+              </TouchableOpacity>
+              {purchaseDatepicker}
+          </View>
+          <View style={styles.generalInputContainer}>
+              <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
+                  <Text style={{color: '#7E7676', paddingTop: 16}}>{this.state.expireDate=== '' ? 'Expire date' : moment(this.state.expireDate).format('MM/DD/YYYY')}</Text>
+              </TouchableOpacity>
+              {expireDatepicker}
+          </View>
+          <View style={styles.generalInputContainer}>
+              <TextInput
+                  style = {styles.generalInput}
+                  placeholder = "Category"
+                  placeholderTextColor = '#7E7676'
+                  onChangeText = {(category) => {this.setState({...this.state, category: category})}}
+                  value = {this.state.category}
+              >
+              </TextInput>
+          </View>
+          <View style={styles.generalInputContainer}>
+              <TextInput
+                  style = {styles.generalInput}
+                  placeholder = "Add note"
+                  placeholderTextColor = '#7E7676'
+                  onChangeText = {(note) => {this.setState({...this.state, note: note})}}
+                  value = {this.state.category}
+              >
+              </TextInput>
+          </View>
+        </ScrollView>
+      </View>
+    )
+  }
 }
-}
-
-HomeScreen.navigationOptions = {
-  header: null,
-};
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
-      
     },
-    titleContainer: {
-      paddingTop: 154,
-      paddingLeft: 24
+    topicContainer: {
+      paddingTop: 134,
+      paddingLeft: 99,
+      paddingRight: 99
     },
-    titleText: {
-      color: '#F79E8E',
-      fontSize: 24,
-      width: 265,
-      height: 33,
+    topicText: {
+      color: '#7E7676',
+      fontSize: 22,
       fontWeight: 'bold'
     },
-    firstNameContainer: {
-      paddingTop: 50,
+    titleContainer: {
+      paddingTop: 35,
       paddingLeft: 24,
       paddingRight: 24
     },
-    lastNameContainer: {
+    generalInputContainer: {
       paddingTop: 16,
       paddingLeft: 24,
       paddingRight: 24
     },
-   emailContainer: {
-    paddingTop: 16,
-    paddingLeft: 24,
-    paddingRight: 24
-   }, 
-   passWordContainer: {
-    paddingTop: 16,
-    paddingLeft: 24,
-    paddingRight: 24
-   },
-   joinContainer: {
-    paddingTop: 28,
-    paddingLeft: 43,
-   },
-   joinText: {
-    color:'#fff',
-    textAlign:'center',
-    paddingTop: 17,
-    fontSize: 18,
-    paddingBottom: 17
-   },
-   joinScreenButton: {
-    width: 327,
-    height: 50,
-    opacity: 100
-   },
-   alreadyContainer: {
-      paddingTop: 30,
-      paddingLeft: 97,
-      paddingRight: 97,
-   },
-   agreeTerms: {
-     paddingTop: 47,
-     paddingLeft: 78,
-     paddingRight: 78,
-     fontSize: 12,
-     fontFamily: 'sofia-pro',
-     color: '#7E7676',
-     textAlign: 'center',
-     lineHeight: 22
-   }
+    generalInput: {
+      backgroundColor: '#FFFFFF',
+      height: 50,
+      borderWidth: 1,
+      borderRadius: 15,
+      paddingLeft: 16,
+      borderColor: '#F79E8E'
+    }
 });

@@ -6,17 +6,19 @@ import GradientButton from 'react-native-gradient-buttons';
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 
-export default class SignupScreen extends React.Component {
+export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {firstName: '',
-                  lastName: '', 
-                  email: '', 
-                  password: '',
-                  goodFirstName: true,
-                  goodLastName: true,
-                  goodEmail: true,
-                  goodPassword: true}
+    this.state = {
+      firstName: '',
+      lastName: '', 
+      email: '', 
+      password: '',
+      goodFirstName: true,
+      goodLastName: true,
+      goodEmail: true,
+      goodPassword: true
+    }
   }
   emailCallback = (email) => {
     this.setState({...this.state, email: email})
@@ -113,6 +115,7 @@ export default class SignupScreen extends React.Component {
             title='Already have an account'
             color='#7e7676'
             type='clear'
+            onPress={() => {this.props.navigation.navigate('Login')}}
           />
         </View>
         <Text style={styles.agreeTerms}>

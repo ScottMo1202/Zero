@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     paddingRight: 24
    },
    joinContainer: {
-    paddingTop: 0,
+    paddingTop: 28,
     paddingLeft: 43,
    },
    joinText: {

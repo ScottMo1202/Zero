@@ -1,21 +1,22 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import * as WebBrowser from 'expo-web-browser';
 import GradientButton from 'react-native-gradient-buttons';
+
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {email: '', 
+    this.state = {firstName: '',
+                  lastName: '', 
+                  email: '', 
                   password: '',
+                  goodFirstName: true,
+                  goodLastName: true,
                   goodEmail: true,
                   goodPassword: true}
-    this.emailCallback = this.emailCallback.bind(this)
-    this.passwordCallback = this.passwordCallback.bind(this)
-
   }
   emailCallback = (email) => {
     this.setState({...this.state, email: email})
@@ -23,12 +24,25 @@ export default class HomeScreen extends React.Component {
   passwordCallback = (password) => {
     this.setState({...this.state, password: password})
   }
-  onLogin(email, password) {
+  onJoin(email, firstName, lastName, password) {
+    this.validateForm(email, firstName, lastName, password)
+  }
+  validateForm(email, firstName, lastName, password) {
     let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
     if(emailReg.test(email) === false) {
-      this.setState({goodEmail: false})
+      this.setState({...this.state, goodEmail: false})
     } else {
-      this.setState({goodEmail: true})
+      this.setState({...this.state, goodEmail: true})
+    }
+    if(firstName === '') {
+      this.setState({goodFirstName: false})
+    } else {
+      this.setState({goodFirstName: true})
+    }
+    if(lastName === '') {
+      this.setState({goodLastName: false})
+    } else {
+      this.setState({goodLastName: true})
     }
     if(password === '') {
       this.setState({goodPassword: false})
@@ -37,6 +51,8 @@ export default class HomeScreen extends React.Component {
     }
   }
   render() {
+    const firstNameError = <Text style={{paddingLeft: 6, color: 'red'}}>The first name is required!</Text>
+    const lastNameError = <Text style={{paddingLeft: 6, color: 'red'}}>The last name is required!</Text>
     const emailError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid email!</Text>
     const passwordError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid password!</Text>
     return (
@@ -45,7 +61,43 @@ export default class HomeScreen extends React.Component {
         <View style={styles.titleContainer}>
           <Text
             style={styles.titleText}
-          >Login in to Zero</Text>
+          >Become a Zero member</Text>
+        </View>
+        <View style={styles.firstNameContainer}>
+          <TextInput
+              style = {{
+                  backgroundColor: '#FFFFFF',
+                  height: 50,
+                  borderWidth: 1,
+                  borderRadius: 15,
+                  paddingLeft: 16,
+                  borderColor: '#F79E8E'
+              }}
+              placeholder = "First Name"
+              placeholderTextColor = '#7E7676'
+              onChangeText = {(firstName) => {this.setState({...this.state, firstName: firstName})}}
+              value = {this.state.firstName}
+          >
+          </TextInput>
+          {this.state.goodFirstName ? null : firstNameError}
+        </View>
+        <View style={styles.lastNameContainer}>
+          <TextInput
+                style = {{
+                    backgroundColor: '#FFFFFF',
+                    height: 50,
+                    borderWidth: 1,
+                    borderRadius: 15,
+                    paddingLeft: 16,
+                    borderColor: '#F79E8E'
+                }}
+                placeholder = "Last Name"
+                placeholderTextColor = '#7E7676'
+                onChangeText = {(lastName) => {this.setState({...this.state, lastName: lastName})}}
+                value = {this.state.lastName}
+            >
+            </TextInput>
+            {this.state.goodLastName ? null : lastNameError}
         </View>
         <View style={styles.emailContainer}>
           <EmailInput emailCallback={this.emailCallback}></EmailInput>
@@ -55,32 +107,28 @@ export default class HomeScreen extends React.Component {
           <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
           {this.state.goodPassword ? null : passwordError}
         </View>
-        <View style={styles.signUpContainer}
+        <View style={styles.alreadyContainer}
         >
           <Button 
-            title='New to Zero'
+            title='Already have an account'
             color='#7e7676'
             type='clear'
+            onPress={() => {this.props.navigation.navigate('Login')}}
           />
         </View>
-        <View style={styles.forgotContainer}
-        >
-          <Button 
-            title='Forget your password'
-            color='#7e7676'
-            type='clear'
-          />
-        </View>
-        <View style={styles.loginContainer}>
+        <Text style={styles.agreeTerms}>
+                By creating an account you agree to our Terms of Service and Private Policy
+        </Text>
+        <View style={styles.joinContainer}>
           <GradientButton
-            style={styles.loginScreenButton}
+            style={styles.joinScreenButton}
             gradientBegin="#F7DBC9"
             gradientEnd='#F79E8E'
             gradientDirection="vertical"
-            text="Log in"
+            text="Join Now"
             radius = {15}
-            textStyle={styles.loginText}
-            onPressAction={() => this.onLogin(this.state.email, this.state.password)}
+            textStyle={styles.joinText}
+            onPressAction={() => this.onJoin(this.state.email, this.state.firstName, this.state.lastName, this.state.password)}
             >
           </GradientButton>
         </View>
@@ -101,18 +149,28 @@ const styles = StyleSheet.create({
       
     },
     titleContainer: {
-      paddingTop: 219,
+      paddingTop: 154,
       paddingLeft: 24
     },
     titleText: {
       color: '#F79E8E',
       fontSize: 24,
-      width: 200,
+      width: 265,
       height: 33,
       fontWeight: 'bold'
     },
+    firstNameContainer: {
+      paddingTop: 50,
+      paddingLeft: 24,
+      paddingRight: 24
+    },
+    lastNameContainer: {
+      paddingTop: 16,
+      paddingLeft: 24,
+      paddingRight: 24
+    },
    emailContainer: {
-    paddingTop: 50,
+    paddingTop: 16,
     paddingLeft: 24,
     paddingRight: 24
    }, 
@@ -121,30 +179,35 @@ const styles = StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24
    },
-   loginContainer: {
-    paddingTop: 144,
+   joinContainer: {
+    paddingTop: 28,
     paddingLeft: 43,
    },
-   loginText: {
+   joinText: {
     color:'#fff',
     textAlign:'center',
     paddingTop: 17,
     fontSize: 18,
     paddingBottom: 17
    },
-   loginScreenButton: {
+   joinScreenButton: {
     width: 327,
     height: 50,
     opacity: 100
    },
-   signUpContainer: {
+   alreadyContainer: {
       paddingTop: 30,
-      paddingLeft: 144,
-      paddingRight: 144,
+      paddingLeft: 97,
+      paddingRight: 97,
    },
-   forgotContainer: {
-     paddingTop: 0,
-     paddingLeft: 109,
-     paddingRight: 109
+   agreeTerms: {
+     paddingTop: 47,
+     paddingLeft: 78,
+     paddingRight: 78,
+     fontSize: 12,
+     fontFamily: 'sofia-pro',
+     color: '#7E7676',
+     textAlign: 'center',
+     lineHeight: 22
    }
 });

@@ -60,6 +60,7 @@ export default class HomeScreen extends React.Component {
             title='New to Zero'
             color='#7e7676'
             type='clear'
+            onPress={() => {this.props.navigation.navigate('Signup')}}
           />
         </View>
         <View style={styles.forgotContainer}

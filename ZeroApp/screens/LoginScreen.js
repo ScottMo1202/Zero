@@ -72,6 +72,7 @@ export default class HomeScreen extends React.Component {
             title='Forget your password'
             color='#7e7676'
             type='clear'
+            onPress={() => {this.props.navigation.navigate('Manual Input')}}
           />
         </View>
         <View style={styles.loginContainer}>

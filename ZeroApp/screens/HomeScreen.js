@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button, TextInput, DatePickerIOS, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import DatePicker from 'react-native-datepicker'
 import GradientButton from 'react-native-gradient-buttons';
 import { render } from 'react-dom';
 

@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
+import ManualInputScreen from '../screens/ManualInputScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -19,16 +20,35 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/home.png")} />,
         }}
       />
       <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
+        name="Manual Input"
+        component={ManualInputScreen}
         options={{
-          title: 'Resources',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/edit.png")} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Scan"
+        component={ManualInputScreen}
+        options={{
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/scan.png")} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="List"
+        component={ManualInputScreen}
+        options={{
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/list.png")} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={ManualInputScreen}
+        options={{
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/profile.png")} />,
         }}
       />
     </BottomTab.Navigator>

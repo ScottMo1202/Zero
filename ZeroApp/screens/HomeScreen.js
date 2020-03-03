@@ -1,121 +1,179 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, TextInput, DatePickerIOS, TouchableOpacity } from 'react-native';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import GradientButton from 'react-native-gradient-buttons';
-import { render } from 'react-dom';
+import * as WebBrowser from 'expo-web-browser';
 
-export default class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      title: '',
-      purchaseDate: '',
-      expireDate: '',
-      category: '',
-      note: '',
-      showPurchaseDatePicker: false,
-      showExpireDatePicker: false
-    }
-  }
-  render() {
-    let moment = require('moment')
-    let purchaseDatepicker = this.state.showPurchaseDatePicker ? 
-                      <DatePickerIOS style={{ height: 150 }}
-                                    mode="date"
-                                    date={this.state.purchaseDate === '' ? new Date() : this.state.purchaseDate}
-                                    onDateChange={(purchaseDate) => this.setState({purchaseDate})}/> : null
-    let expireDatepicker= this.state.showExpireDatePicker ? 
-                      <DatePickerIOS style={{ height: 150 }}
-                                    mode="date"
-                                    date={this.state.expireDate === '' ? new Date() : this.state.expireDate}
-                                    onDateChange={(expireDate) => this.setState({expireDate})}/> : null
-    return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container}>
-          <View style={styles.topicContainer}>
-            <Text
-              style={styles.topicText}
-            >Record a new entry</Text>
+import { MonoText } from '../components/StyledText';
+
+export default function HomeScreen() {
+  return (
+    <View style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <View style={styles.welcomeContainer}>
+          <Image
+            source={
+              __DEV__
+                ? require('../assets/images/robot-dev.png')
+                : require('../assets/images/robot-prod.png')
+            }
+            style={styles.welcomeImage}
+          />
+        </View>
+
+        <View style={styles.getStartedContainer}>
+          <DevelopmentModeNotice />
+
+          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
+
+          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
+            <MonoText>screens/HomeScreen.js</MonoText>
           </View>
-          <View style={styles.titleContainer}>
-              <TextInput
-                  style = {styles.generalInput}
-                  placeholder = "Title"
-                  placeholderTextColor = '#7E7676'
-                  onChangeText = {(title) => {this.setState({...this.state, title: title})}}
-                  value = {this.state.title}
-              >
-              </TextInput>
-          </View>
-          <View style={styles.generalInputContainer}>
-              <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showPurchaseDatePicker: !this.state.showPurchaseDatePicker})}>
-                  <Text style={{color: '#7E7676', paddingTop: 16}}>{this.state.purchaseDate === '' ? 'Date of purchase' : moment(this.state.purchaseDate).format('MM/DD/YYYY')}</Text>
-              </TouchableOpacity>
-              {purchaseDatepicker}
-          </View>
-          <View style={styles.generalInputContainer}>
-              <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
-                  <Text style={{color: '#7E7676', paddingTop: 16}}>{this.state.expireDate=== '' ? 'Expire date' : moment(this.state.expireDate).format('MM/DD/YYYY')}</Text>
-              </TouchableOpacity>
-              {expireDatepicker}
-          </View>
-          <View style={styles.generalInputContainer}>
-              <TextInput
-                  style = {styles.generalInput}
-                  placeholder = "Category"
-                  placeholderTextColor = '#7E7676'
-                  onChangeText = {(category) => {this.setState({...this.state, category: category})}}
-                  value = {this.state.category}
-              >
-              </TextInput>
-          </View>
-          <View style={styles.generalInputContainer}>
-              <TextInput
-                  style = {styles.generalInput}
-                  placeholder = "Add note"
-                  placeholderTextColor = '#7E7676'
-                  onChangeText = {(note) => {this.setState({...this.state, note: note})}}
-                  value = {this.state.category}
-              >
-              </TextInput>
-          </View>
-        </ScrollView>
+
+          <Text style={styles.getStartedText}>
+            Change any of the text, save the file, and your app will automatically reload.
+          </Text>
+        </View>
+
+        <View style={styles.helpContainer}>
+          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
+            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      <View style={styles.tabBarInfoContainer}>
+        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
+
+        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
+          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
+        </View>
       </View>
-    )
+    </View>
+  );
+}
+
+HomeScreen.navigationOptions = {
+  header: null,
+};
+
+function DevelopmentModeNotice() {
+  if (__DEV__) {
+    const learnMoreButton = (
+      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
+        Learn more
+      </Text>
+    );
+
+    return (
+      <Text style={styles.developmentModeText}>
+        Development mode is enabled: your app will be slower but you can use useful development
+        tools. {learnMoreButton}
+      </Text>
+    );
+  } else {
+    return (
+      <Text style={styles.developmentModeText}>
+        You are not in development mode: your app will run at full speed.
+      </Text>
+    );
   }
 }
 
+function handleLearnMorePress() {
+  WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
+}
+
+function handleHelpPress() {
+  WebBrowser.openBrowserAsync(
+    'https://docs.expo.io/versions/latest/get-started/create-a-new-app/#making-your-first-change'
+  );
+}
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
-    topicContainer: {
-      paddingTop: 134,
-      paddingLeft: 99,
-      paddingRight: 99
-    },
-    topicText: {
-      color: '#7E7676',
-      fontSize: 22,
-      fontWeight: 'bold'
-    },
-    titleContainer: {
-      paddingTop: 35,
-      paddingLeft: 24,
-      paddingRight: 24
-    },
-    generalInputContainer: {
-      paddingTop: 16,
-      paddingLeft: 24,
-      paddingRight: 24
-    },
-    generalInput: {
-      backgroundColor: '#FFFFFF',
-      height: 50,
-      borderWidth: 1,
-      borderRadius: 15,
-      paddingLeft: 16,
-      borderColor: '#F79E8E'
-    }
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  developmentModeText: {
+    marginBottom: 20,
+    color: 'rgba(0,0,0,0.4)',
+    fontSize: 14,
+    lineHeight: 19,
+    textAlign: 'center',
+  },
+  contentContainer: {
+    paddingTop: 30,
+  },
+  welcomeContainer: {
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  welcomeImage: {
+    width: 100,
+    height: 80,
+    resizeMode: 'contain',
+    marginTop: 3,
+    marginLeft: -10,
+  },
+  getStartedContainer: {
+    alignItems: 'center',
+    marginHorizontal: 50,
+  },
+  homeScreenFilename: {
+    marginVertical: 7,
+  },
+  codeHighlightText: {
+    color: 'rgba(96,100,109, 0.8)',
+  },
+  codeHighlightContainer: {
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    borderRadius: 3,
+    paddingHorizontal: 4,
+  },
+  getStartedText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 24,
+    textAlign: 'center',
+  },
+  tabBarInfoContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: -3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
+    alignItems: 'center',
+    backgroundColor: '#fbfbfb',
+    paddingVertical: 20,
+  },
+  tabBarInfoText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center',
+  },
+  navigationFilename: {
+    marginTop: 5,
+  },
+  helpContainer: {
+    marginTop: 15,
+    alignItems: 'center',
+  },
+  helpLink: {
+    paddingVertical: 15,
+  },
+  helpLinkText: {
+    fontSize: 14,
+    color: '#2e78b7',
+  },
 });

@@ -3,8 +3,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
+import ScanScreen from '../screens/ScanScreen';
 import ManualInputScreen from '../screens/ManualInputScreen';
-
+import { StyleSheet, Text, View, BackHandler } from 'react-native';
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
 
@@ -15,11 +16,19 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator style={{backgroundColor: '#F6A192'}} initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={{
+      activeTintColor: '#F6A192',
+      tabStyle:{
+        backgroundColor:'#FFF5F3',
+        bottom: 0,
+        height: 80,
+      }
+    }}>
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
         options={{
+          tabBarLabel:"",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/home.png")} />,
         }}
       />
@@ -27,13 +36,15 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Manual Input"
         component={ManualInputScreen}
         options={{
+          tabBarLabel:"",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/edit.png")} />,
         }}
       />
       <BottomTab.Screen
         name="Scan"
-        component={ManualInputScreen}
+        component={ScanScreen}
         options={{
+          tabBarLabel:"",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/scan.png")} />,
         }}
       />
@@ -41,6 +52,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="List"
         component={ManualInputScreen}
         options={{
+          tabBarLabel:"",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/list.png")} />,
         }}
       />
@@ -48,6 +60,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Profile"
         component={ManualInputScreen}
         options={{
+          tabBarLabel:"",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/profile.png")} />,
         }}
       />

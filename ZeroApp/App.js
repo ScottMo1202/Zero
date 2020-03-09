@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,7 +11,7 @@ import ManualInputScreen from './screens/ManualInputScreen'
 import SignupScreen from './screens/SignupScreen'
 import LoginScreen from './screens/LoginScreen'
 import useLinking from './navigation/useLinking';
-
+import ScanScreen from './screens/ScanScreen';
 const Stack = createStackNavigator();
 
 export default function App(props) {
@@ -61,6 +60,7 @@ export default function App(props) {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Home Screen" component={HomeScreen} />
             <Stack.Screen name="Manual Input" component={ManualInputScreen} />
+            <Stack.Screen name="Scan Screen" component={ScanScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>

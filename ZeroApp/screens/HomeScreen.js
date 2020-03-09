@@ -1,10 +1,6 @@
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Span } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import * as WebBrowser from 'expo-web-browser';
-
-import { MonoText } from '../components/StyledText';
-
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
@@ -12,42 +8,23 @@ export default function HomeScreen() {
         <View style={styles.welcomeContainer}>
           <Image
             source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
+              require('../assets/icons/homepage.png')
             }
             style={styles.welcomeImage}
           />
         </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
+        <Text style={[styles.getStartedText, styles.slogan]}>Zero, an eco-friendly lifestyle.</Text>
+        <View style={styles.homescreenBox}>
+            <Text style={styles.listText}>With Zero, you can:</Text>
+            <View style={styles.listView}>
+            <View style={{flexDirection: 'row'}}><Text style={styles.bulletPoint}>{'\u2022'}</Text><Text style={styles.listText}>Mark expiration dates</Text></View>
+            <View style={{flexDirection: 'row'}}><Text style={styles.bulletPoint}>{'\u2022'}</Text><Text style={styles.listText}>Get automatic notifications</Text></View>
+            <View style={{flexDirection: 'row'}}><Text style={styles.bulletPoint}>{'\u2022'}</Text><Text style={styles.listText}>Scan barcodes & receipts</Text></View>
+            <View style={{flexDirection: 'row'}}><Text style={styles.bulletPoint}>{'\u2022'}</Text><Text style={styles.listText}>Manage waste habits</Text></View>
+            </View>
         </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.getStartedText}>You have no upcoming expiration dates</Text>
       </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
-        </View>
-      </View>
     </View>
   );
 }
@@ -56,40 +33,13 @@ HomeScreen.navigationOptions = {
   header: null,
 };
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use useful development
-        tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/get-started/create-a-new-app/#making-your-first-change'
-  );
-}
 
 const styles = StyleSheet.create({
+  rowView:{
+    flex: 1,
+    flexDirection:'row',
+    flexWrap:'wrap'
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -107,18 +57,14 @@ const styles = StyleSheet.create({
   welcomeContainer: {
     alignItems: 'center',
     marginTop: 10,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   welcomeImage: {
-    width: 100,
-    height: 80,
+    width: 200,
+    height:200,
     resizeMode: 'contain',
     marginTop: 3,
     marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
   },
   homeScreenFilename: {
     marginVertical: 7,
@@ -135,7 +81,23 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
-    textAlign: 'center',
+    textAlign: 'left',
+    marginLeft: 20,
+    fontSize: 20,
+    marginBottom: 20,
+  },
+  slogan: {
+    color: '#F79E8E',
+  },
+  listText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    marginLeft: 20,
+    flex: 1, 
+    marginBottom: 10,
+  },
+  listView: {
+    marginLeft: 20,
   },
   tabBarInfoContainer: {
     position: 'absolute',
@@ -162,6 +124,10 @@ const styles = StyleSheet.create({
     color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
   },
+  bulletPoint: {
+    color: '#48A3D1',
+    marginLeft: 20
+  },
   navigationFilename: {
     marginTop: 5,
   },
@@ -176,4 +142,28 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  homescreenBox: {
+    // backgroundColor: "#FFF5F3",
+    // width: '100%',
+    // height: 200,
+    // position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: -3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
+    // alignItems: 'flex-start',
+    backgroundColor: '#FFF5F3',
+    paddingVertical: 30,
+    marginBottom: 20,
+  }
 });

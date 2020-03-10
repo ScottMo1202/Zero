@@ -4,6 +4,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import ScanScreen from '../screens/ScanScreen';
+import LoginScreen from '../screens/LoginScreen'
 import ManualInputScreen from '../screens/ManualInputScreen';
 import { StyleSheet, Text, View, BackHandler } from 'react-native';
 const BottomTab = createBottomTabNavigator();
@@ -58,7 +59,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Profile"
-        component={ManualInputScreen}
+        component={LoginScreen}
         options={{
           tabBarLabel:"",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/profile.png")} />,
@@ -74,7 +75,13 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'Home':
       return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
+    case 'Manual Input':
+      return 'Record your product manually';
+    case 'Scan':
+      return 'Scan your product';
+    case 'List':
+      return 'Prudct list'
+    case 'Profile': 
+      return 'Profile'
   }
 }

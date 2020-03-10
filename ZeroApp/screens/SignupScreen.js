@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
      paddingLeft: 78,
      paddingRight: 78,
      fontSize: 12,
-     fontFamily: 'sofia-pro',
+    //  fontFamily: 'sofia-pro',
      color: '#7E7676',
      textAlign: 'center',
      lineHeight: 22

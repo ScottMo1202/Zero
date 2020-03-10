@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TextInput, DatePickerIOS, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, TouchableOpacity, Keyboard, UIManager, Animated} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import GradientButton from 'react-native-gradient-buttons';
 import { render } from 'react-dom';
 import RNPickerSelect from 'react-native-picker-select'
+
+const { State: TextInputState } = TextInput;
 
 export default class ManualInputScreen extends React.Component {
   constructor(props) {
@@ -19,7 +21,51 @@ export default class ManualInputScreen extends React.Component {
       showCategoryPicker: false,
       goodTitle: true,
       goodExpireDate: true,
+      shift: new Animated.Value(0)
     }
+  }
+
+  componentWillMount() {
+    this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow);
+    this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide)
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowSub.remove();
+    this.keyboardDidHideSub.remove();
+  }
+
+  handleKeyboardDidShow = (event) => {
+    const { height: windowHeight } = Dimensions.get('window');
+    const keyboardHeight = event.endCoordinates.height;
+    const currentlyFocusedField = TextInputState.currentlyFocusedField();
+    UIManager.measure(currentlyFocusedField, (originX, originY, width, height, pageX, pageY) => {
+      const fieldHeight = height;
+      const fieldTop = pageY;
+      const gap = (windowHeight - keyboardHeight) - (fieldTop + fieldHeight);
+      if (gap >= 0) {
+        return;
+      }
+      Animated.timing(
+        this.state.shift,
+        {
+          toValue: gap,
+          duration: 1000,
+          useNativeDriver: true,
+        }
+      ).start();
+    });
+  }
+
+  handleKeyboardDidHide = () => {
+    Animated.timing(
+      this.state.shift,
+      {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }
+    ).start();
   }
   onSubmit(title, expireDate) {
       this.validateForm(title, expireDate)
@@ -44,6 +90,7 @@ export default class ManualInputScreen extends React.Component {
     }
   }
   render() {
+    const { shift } = this.state;
     const categoryItems = [{
       label: 'Food',
       value: 'Food',
@@ -75,7 +122,8 @@ export default class ManualInputScreen extends React.Component {
     const expireDateError = <Text style={{paddingLeft: 6, color: 'red'}}>The expire date is required!</Text>
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} behavior="padding">
+        <Animated.ScrollView behavior="padding" style={[styles.container, { transform: [{translateY: shift}] }]}>
+        {/* <ScrollView style={styles.container} behavior="padding"> */}
           <View style={styles.topicContainer}>
             <Text
               style={styles.topicText}
@@ -146,7 +194,8 @@ export default class ManualInputScreen extends React.Component {
               onPressAction={() => this.onSubmit(this.state.title, this.state.expireDate, this.state.category)}
             ></GradientButton>
           </View>
-        </ScrollView>
+        {/* </ScrollView> */}
+        </Animated.ScrollView>
       </View>
     )
   }

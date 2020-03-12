@@ -12,6 +12,7 @@ import SignupScreen from './screens/SignupScreen'
 import LoginScreen from './screens/LoginScreen'
 import useLinking from './navigation/useLinking';
 import ScanScreen from './screens/ScanScreen';
+import ListScreen from './screens/ListScreen';
 const Stack = createStackNavigator();
 
 export default function App(props) {
@@ -61,6 +62,7 @@ export default function App(props) {
             <Stack.Screen name="Home Screen" component={HomeScreen} />
             <Stack.Screen name="Manual Input" component={ManualInputScreen} />
             <Stack.Screen name="Scan Screen" component={ScanScreen} />
+            <Stack.Screen name="List Screen" component={ListScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, TouchableOpacity, Keyboard, UIManager, Animated} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import GradientButton from 'react-native-gradient-buttons';
-import { render } from 'react-dom';
 import RNPickerSelect from 'react-native-picker-select'
 
 const { State: TextInputState } = TextInput;
@@ -23,6 +21,8 @@ export default class ManualInputScreen extends React.Component {
       goodExpireDate: true,
       shift: new Animated.Value(0)
     }
+    this.handleKeyboardDidHide = this.handleKeyboardDidHide.bind(this)
+    this.handleKeyboardDidShow = this.handleKeyboardDidShow.bind(this)
   }
 
   componentWillMount() {
@@ -35,7 +35,7 @@ export default class ManualInputScreen extends React.Component {
     this.keyboardDidHideSub.remove();
   }
 
-  handleKeyboardDidShow = (event) => {
+  handleKeyboardDidShow(event) {
     const { height: windowHeight } = Dimensions.get('window');
     const keyboardHeight = event.endCoordinates.height;
     const currentlyFocusedField = TextInputState.currentlyFocusedField();
@@ -50,14 +50,14 @@ export default class ManualInputScreen extends React.Component {
         this.state.shift,
         {
           toValue: gap,
-          duration: 1000,
+          duration: 200,
           useNativeDriver: true,
         }
       ).start();
     });
   }
 
-  handleKeyboardDidHide = () => {
+  handleKeyboardDidHide() {
     Animated.timing(
       this.state.shift,
       {
@@ -207,9 +207,9 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
     },
     topicContainer: {
-      paddingTop: 134,
-      paddingLeft: 99,
-      paddingRight: 99
+      paddingTop: 114,
+      paddingLeft: 80,
+      paddingRight: 80
     },
     topicText: {
       color: '#7E7676',
@@ -235,18 +235,19 @@ const styles = StyleSheet.create({
       borderColor: '#F79E8E'
     },
     submitContainer: {
-      paddingTop: 87,
+      paddingTop: 67,
       flexDirection: 'row'
     },
     saveButton: {
       paddingLeft: 63,
       opacity: 100,
+      paddingRight: 20,
       flex: 1
     },
     saveText: {
       textAlign: 'center',
       fontSize: 16,
-      width: 125,
+      width: 105,
       height: 50,
       paddingTop: 16,
       color: '#7E7676',
@@ -270,13 +271,13 @@ const styles = StyleSheet.create({
     }, 
     pickerContainer: {
         height: 50,
-        width: 366,
         borderWidth: 1,
         borderColor: '#F79E8E',
         paddingTop: 16,
         borderRadius: 15,
         backgroundColor: 'white',
         marginLeft: 24,
+        marginRight: 24,
         marginTop: 16,
         paddingLeft: 16
         // color: 'black',

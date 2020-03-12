@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
       
     },
     titleContainer: {
-      paddingTop: 154,
+      paddingTop: 70,
       paddingLeft: 24
     },
     titleText: {
@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
    joinContainer: {
     paddingTop: 28,
     paddingLeft: 43,
+    paddingRight: 43
    },
    joinText: {
     color:'#fff',
@@ -179,17 +180,17 @@ const styles = StyleSheet.create({
     paddingBottom: 17
    },
    joinScreenButton: {
-    width: 327,
+    // width: 327,
     height: 50,
     opacity: 100
    },
    alreadyContainer: {
-      paddingTop: 30,
-      paddingLeft: 97,
-      paddingRight: 97,
+      paddingTop: 20,
+      paddingLeft: 80,
+      paddingRight: 80,
    },
    agreeTerms: {
-     paddingTop: 47,
+     paddingTop: 37,
      paddingLeft: 78,
      paddingRight: 78,
      fontSize: 12,

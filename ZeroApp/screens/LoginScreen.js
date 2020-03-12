@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
       
     },
     titleContainer: {
-      paddingTop: 219,
+      paddingTop: 169,
       paddingLeft: 24
     },
     titleText: {
@@ -127,8 +127,9 @@ const styles = StyleSheet.create({
     paddingRight: 24
    },
    loginContainer: {
-    paddingTop: 144,
+    paddingTop: 80,
     paddingLeft: 43,
+    paddingRight: 43
    },
    loginText: {
     color:'#fff',
@@ -138,18 +139,18 @@ const styles = StyleSheet.create({
     paddingBottom: 17
    },
    loginScreenButton: {
-    width: 327,
+    width: 283,
     height: 50,
     opacity: 100
    },
    signUpContainer: {
       paddingTop: 30,
-      paddingLeft: 144,
-      paddingRight: 144,
+      paddingLeft: 120,
+      paddingRight: 120,
    },
    forgotContainer: {
      paddingTop: 0,
-     paddingLeft: 109,
-     paddingRight: 109
+     paddingLeft: 89,
+     paddingRight: 89
    }
 });

@@ -5,6 +5,9 @@ import GradientButton from 'react-native-gradient-buttons';
 
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
+import  firebase from 'firebase/app'
+import 'firebase/auth';
+import 'firebase/database';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -28,6 +31,15 @@ export default class HomeScreen extends React.Component {
   }
   onJoin(email, firstName, lastName, password) {
     this.validateForm(email, firstName, lastName, password)
+    if(this.state.goodEmail && this.state.goodPassword) {
+      firebase.auth().createUserWithEmailAndPassword(email, password) 
+       .then((userCredentials) => {
+         let user = userCredentials.user
+       })
+       .catch((error) => {
+         console.log(error.message)
+       })
+    }
   }
   validateForm(email, firstName, lastName, password) {
     let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;

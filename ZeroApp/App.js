@@ -4,7 +4,6 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import HomeScreen from './screens/HomeScreen';
 import ManualInputScreen from './screens/ManualInputScreen'
@@ -13,6 +12,7 @@ import LoginScreen from './screens/LoginScreen'
 import useLinking from './navigation/useLinking';
 import ScanScreen from './screens/ScanScreen';
 import ListScreen from './screens/ListScreen';
+import firebse from 'firebase/app'
 const Stack = createStackNavigator();
 
 export default function App(props) {
@@ -20,7 +20,7 @@ export default function App(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
-
+  // Initialize Firebase
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {

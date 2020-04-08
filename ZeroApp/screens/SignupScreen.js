@@ -5,9 +5,10 @@ import GradientButton from 'react-native-gradient-buttons';
 
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
-import  firebase from 'firebase/app'
-import 'firebase/auth';
-import 'firebase/database';
+import firebase from '../components/firebase'
+// import  firebase from 'firebase/app'
+// import 'firebase/auth';
+// import 'firebase/database';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class HomeScreen extends React.Component {
       goodFirstName: true,
       goodLastName: true,
       goodEmail: true,
+      doubleEmail: false,
       goodPassword: true
     }
   }
@@ -30,44 +32,75 @@ export default class HomeScreen extends React.Component {
     this.setState({...this.state, password: password})
   }
   onJoin(email, firstName, lastName, password) {
-    this.validateForm(email, firstName, lastName, password)
-    if(this.state.goodEmail && this.state.goodPassword) {
-      firebase.auth().createUserWithEmailAndPassword(email, password) 
-       .then((userCredentials) => {
-         let user = userCredentials.user
-       })
-       .catch((error) => {
-         console.log(error.message)
-       })
-    }
-  }
-  validateForm(email, firstName, lastName, password) {
     let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
     if(emailReg.test(email) === false) {
       this.setState({...this.state, goodEmail: false})
+      return
     } else {
       this.setState({...this.state, goodEmail: true})
     }
     if(firstName === '') {
       this.setState({goodFirstName: false})
+      return 
     } else {
       this.setState({goodFirstName: true})
     }
     if(lastName === '') {
       this.setState({goodLastName: false})
+      return 
     } else {
       this.setState({goodLastName: true})
     }
     if(password === '') {
       this.setState({goodPassword: false})
+      return
     } else {
       this.setState({goodPassword: true})
     }
+    firebase.auth().createUserWithEmailAndPassword(email, password) 
+      .then((userCredentials) => {
+        this.setState({doubleEmail: false})
+        let user = userCredentials.user
+      })
+      .catch((error) => {
+        console.log(error.message)
+        this.setState({doubleEmail: true})
+      })
+    
   }
+  // validateForm(email, firstName, lastName, password) {
+  //   let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+  //   if(emailReg.test(email) === false) {
+  //     this.setState({...this.state, goodEmail: false})
+  //     return
+  //   } else {
+  //     this.setState({...this.state, goodEmail: true})
+  //   }
+  //   if(firstName === '') {
+  //     this.setState({goodFirstName: false})
+  //     return 
+  //   } else {
+  //     this.setState({goodFirstName: true})
+  //   }
+  //   if(lastName === '') {
+  //     this.setState({goodLastName: false})
+  //     return 
+  //   } else {
+  //     this.setState({goodLastName: true})
+  //   }
+  //   if(password === '') {
+  //     this.setState({goodPassword: false})
+  //     return
+  //   } else {
+  //     this.setState({goodPassword: true})
+  //   }
+  //   this.onJoin(email, password)
+  // }
   render() {
     const firstNameError = <Text style={{paddingLeft: 6, color: 'red'}}>The first name is required!</Text>
     const lastNameError = <Text style={{paddingLeft: 6, color: 'red'}}>The last name is required!</Text>
     const emailError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid email!</Text>
+    const emailDouble = <Text style={{paddingLeft: 6, color: 'red'}}>Email already exists!</Text>
     const passwordError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid password!</Text>
     return (
     <View style={styles.container}>
@@ -102,6 +135,7 @@ export default class HomeScreen extends React.Component {
         <View style={styles.emailContainer}>
           <EmailInput emailCallback={this.emailCallback}></EmailInput>
           {this.state.goodEmail ? null : emailError}
+          {this.state.doubleEmail ? emailDouble : null}
         </View>
         <View style={styles.passWordContainer}>
           <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
@@ -128,7 +162,8 @@ export default class HomeScreen extends React.Component {
             text="Join Now"
             radius = {15}
             textStyle={styles.joinText}
-            onPressAction={() => this.onJoin(this.state.email, this.state.firstName, this.state.lastName, this.state.password)}
+            onPressAction={() => {this.onJoin(this.state.email, this.state.firstName, 
+                    this.state.lastName, this.state.password);}}
             >
           </GradientButton>
         </View>

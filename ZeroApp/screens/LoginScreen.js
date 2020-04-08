@@ -5,7 +5,7 @@ import * as WebBrowser from 'expo-web-browser';
 import GradientButton from 'react-native-gradient-buttons';
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
-
+import firebase from '../components/firebase'
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -13,12 +13,19 @@ export default class HomeScreen extends React.Component {
       email: '', 
       password: '',
       goodEmail: true, 
-      goodPassword: true
+      goodPassword: true,
     }
     this.emailCallback = this.emailCallback.bind(this)
     this.passwordCallback = this.passwordCallback.bind(this)
 
   }
+  // componentDidMount() {
+  //   firebase.auth().onAuthStateChanged(user => {
+  //     if(user) {
+  //       console.log("hello")
+  //     }
+  //   })
+  // }
   emailCallback = (email) => {
     this.setState({...this.state, email: email})
   }
@@ -37,10 +44,22 @@ export default class HomeScreen extends React.Component {
     } else {
       this.setState({goodPassword: true})
     }
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((data) => {
+      this.setState({loginSuccess: true})
+      this.props.navigation.navigate('Home Screen')
+    })
+    .catch((error) => {
+      this.setState({loginSuccess: false})
+      console.log(error.message)
+    })
+
   }
   render() {
     const emailError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid email!</Text>
     const passwordError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid password!</Text>
+    const loginError = <Text style={{paddingLeft: 6, color: 'red'}}>Email or password not correct!</Text>
     return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -77,6 +96,7 @@ export default class HomeScreen extends React.Component {
           />
         </View>
         <View style={styles.loginContainer}>
+        {this.state.loginSuccess ? null : loginError}
           <GradientButton
             style={styles.loginScreenButton}
             gradientBegin="#F7DBC9"

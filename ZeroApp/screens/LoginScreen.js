@@ -6,6 +6,7 @@ import GradientButton from 'react-native-gradient-buttons';
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 import firebase from '../components/firebase'
+import * as Font from 'expo-font';
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -26,6 +27,12 @@ export default class HomeScreen extends React.Component {
   //     }
   //   })
   // }
+  componentDidMount() {
+    Font.loadAsync({
+      'muli-bold': require('../assets/fonts/Muli-Bold.ttf'),
+      'muli-regular': require('../assets/fonts/Muli-Regular.ttf')
+    });
+  }
   emailCallback = (email) => {
     this.setState({...this.state, email: email})
   }
@@ -66,7 +73,7 @@ export default class HomeScreen extends React.Component {
         <View style={styles.titleContainer}>
           <Text
             style={styles.titleText}
-          >Login in to Zero</Text>
+          >Log in to Zero</Text>
         </View>
         <View style={styles.emailContainer}>
           <EmailInput emailCallback={this.emailCallback}></EmailInput>
@@ -80,8 +87,10 @@ export default class HomeScreen extends React.Component {
         >
           <Button 
             title='New to Zero'
+            fontFamily='muli-regular'
             color='#7e7676'
             type='clear'
+
             onPress={() => {this.props.navigation.navigate('Signup')}}
           />
         </View>
@@ -89,6 +98,7 @@ export default class HomeScreen extends React.Component {
         >
           <Button 
             title='Forget your password'
+            fontFamily='muli-regular'
             color='#7e7676'
             type='clear'
             // onPress={() => {this.props.navigation.navigate('Manual Input')}}
@@ -130,11 +140,11 @@ const styles = StyleSheet.create({
       paddingLeft: 24
     },
     titleText: {
-      color: '#F79E8E',
+      color: '#53A386',
       fontSize: 24,
       width: 200,
       height: 33,
-      fontWeight: 'bold'
+      fontFamily: 'muli-bold',
     },
    emailContainer: {
     paddingTop: 50,
@@ -156,6 +166,7 @@ const styles = StyleSheet.create({
     textAlign:'center',
     paddingTop: 17,
     fontSize: 18,
+    fontFamily: 'muli-bold',
     paddingBottom: 17
    },
    loginScreenButton: {

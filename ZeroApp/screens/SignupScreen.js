@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import GradientButton from 'react-native-gradient-buttons';
-
+import * as Font from 'expo-font';
 import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 import firebase from '../components/firebase'
@@ -24,6 +24,13 @@ export default class HomeScreen extends React.Component {
       doubleEmail: false,
       goodPassword: true
     }
+  }
+  componentDidMount() {
+    Font.loadAsync({
+      'muli-bold': require('../assets/fonts/Muli-Bold.ttf'),
+      'muli-regular': require('../assets/fonts/Muli-Regular.ttf')
+
+    });
   }
   emailCallback = (email) => {
     this.setState({...this.state, email: email})
@@ -108,7 +115,7 @@ export default class HomeScreen extends React.Component {
         <View style={styles.titleContainer}>
           <Text
             style={styles.titleText}
-          >Become a Zero member</Text>
+          >Become a Zero Member</Text>
         </View>
         <View style={styles.firstNameContainer}>
           <TextInput
@@ -157,7 +164,7 @@ export default class HomeScreen extends React.Component {
           <GradientButton
             style={styles.joinScreenButton}
             gradientBegin="#F7DBC9"
-            gradientEnd='#F79E8E'
+            gradientEnd='#53A386'
             gradientDirection="vertical"
             text="Join Now"
             radius = {15}
@@ -165,6 +172,7 @@ export default class HomeScreen extends React.Component {
             onPressAction={() => {this.onJoin(this.state.email, this.state.firstName, 
                     this.state.lastName, this.state.password);}}
             >
+
           </GradientButton>
         </View>
       </ScrollView>
@@ -188,11 +196,12 @@ const styles = StyleSheet.create({
       paddingLeft: 24
     },
     titleText: {
-      color: '#F79E8E',
+      color: '#53A386',
+      fontFamily: 'muli-bold',
       fontSize: 24,
       width: 265,
       height: 33,
-      fontWeight: 'bold'
+      // fontWeight: 'bold'
     },
     firstNameContainer: {
       paddingTop: 50,
@@ -252,6 +261,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     paddingLeft: 16,
-    borderColor: '#F79E8E'
+    borderColor: '#53A386'
    }
 });

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, TouchableOpacity, Keyboard, UIManager, Animated} from 'react-native';
 import GradientButton from 'react-native-gradient-buttons';
 import RNPickerSelect from 'react-native-picker-select'
-
+import * as Font from 'expo-font';
 const { State: TextInputState } = TextInput;
 
 export default class ManualInputScreen extends React.Component {
@@ -25,6 +25,13 @@ export default class ManualInputScreen extends React.Component {
     this.handleKeyboardDidShow = this.handleKeyboardDidShow.bind(this)
   }
 
+  componentDidMount() {
+    Font.loadAsync({
+      'muli-bold': require('../assets/fonts/Muli-Bold.ttf'),
+      'muli-regular': require('../assets/fonts/Muli-Regular.ttf')
+
+    });
+  }
   componentWillMount() {
     this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow);
     this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide)
@@ -186,7 +193,7 @@ export default class ManualInputScreen extends React.Component {
             <GradientButton
               style={styles.submitButton}
               gradientBegin="#F7DBC9"
-              gradientEnd='#F79E8E'
+              gradientEnd='#53A386'
               gradientDirection="vertical"
               text="Submit"
               radius = {15}
@@ -212,9 +219,9 @@ const styles = StyleSheet.create({
       paddingRight: 80
     },
     topicText: {
-      color: '#7E7676',
+      color: '#53A386',
       fontSize: 22,
-      fontWeight: 'bold'
+      fontFamily: 'muli-bold'
     },
     titleContainer: {
       paddingTop: 35,
@@ -232,7 +239,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderRadius: 15,
       paddingLeft: 16,
-      borderColor: '#F79E8E'
+      borderColor: '#53A386'
     },
     submitContainer: {
       paddingTop: 67,
@@ -247,11 +254,12 @@ const styles = StyleSheet.create({
     saveText: {
       textAlign: 'center',
       fontSize: 16,
+      fontFamily: 'muli-bold',
       width: 105,
       height: 50,
       paddingTop: 16,
       color: '#7E7676',
-      borderColor: '#F79E8E',
+      borderColor: '#53A386',
       borderWidth: 1,
       borderRadius: 15,
     },
@@ -267,12 +275,13 @@ const styles = StyleSheet.create({
       textAlign:'center',
       paddingTop: 16,
       fontSize: 16,
+      fontFamily: 'muli-bold',
       paddingBottom: 17
     }, 
     pickerContainer: {
         height: 50,
         borderWidth: 1,
-        borderColor: '#F79E8E',
+        borderColor: '#53A386',
         paddingTop: 16,
         borderRadius: 15,
         backgroundColor: 'white',

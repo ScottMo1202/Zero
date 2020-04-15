@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
@@ -29,12 +30,11 @@ export default function App(props) {
 
         // Load our initial navigation state
         setInitialNavigationState(await getInitialState());
-
         // Load fonts
         await Font.loadAsync({
-          ...Ionicons.font,
           'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-          'sofia-pro': require('./assets/fonts/sofiapro-light.otf')
+          'sofia-pro': require('./assets/fonts/sofiapro-light.otf'),
+          'muli-bold': require('./assets/fonts/Muli-Bold.ttf')
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
@@ -47,6 +47,7 @@ export default function App(props) {
 
     loadResourcesAndDataAsync();
   }, []);
+
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;

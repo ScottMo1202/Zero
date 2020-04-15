@@ -15,7 +15,18 @@ export default function ScanScreen() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    fetch("https://api.upcitemdb.com/prod/trial/lookup?upc=" + data, {
+      "method": "GET"
+    })
+    .then((response) => response.json())
+    .then(data => {
+      console.log(data)
+    })
+    .catch(err => {
+      console.log(err);
+    });
+    this.props.navigation.navigate('Manual Input')
+    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
   if (hasPermission === null) {

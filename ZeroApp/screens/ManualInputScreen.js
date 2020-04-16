@@ -9,6 +9,7 @@ export default class ManualInputScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      assetsLoaded: false,
       title: '',
       purchaseDate: '',
       expireDate: '',
@@ -25,12 +26,12 @@ export default class ManualInputScreen extends React.Component {
     this.handleKeyboardDidShow = this.handleKeyboardDidShow.bind(this)
   }
 
-  componentDidMount() {
-    Font.loadAsync({
+  async componentDidMount() {
+    await Font.loadAsync({
       'muli-bold': require('../assets/fonts/Muli-Bold.ttf'),
       'muli-regular': require('../assets/fonts/Muli-Regular.ttf')
-
     });
+    this.setState({assetsLoaded: true})
   }
   componentWillMount() {
     this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow);
@@ -97,6 +98,7 @@ export default class ManualInputScreen extends React.Component {
     }
   }
   render() {
+    const {assetsLoaded} = this.state;
     const { shift } = this.state;
     const categoryItems = [{
       label: 'Food',
@@ -127,84 +129,88 @@ export default class ManualInputScreen extends React.Component {
                                     onDateChange={(expireDate) => this.setState({expireDate})}/> : null
     const titleError = <Text style={{paddingLeft: 6, color: 'red'}}>The title is required!</Text>
     const expireDateError = <Text style={{paddingLeft: 6, color: 'red'}}>The expire date is required!</Text>
-    return (
-      <View style={styles.container}>
-        <Animated.ScrollView behavior="padding" style={[styles.container, { transform: [{translateY: shift}] }]}>
-        {/* <ScrollView style={styles.container} behavior="padding"> */}
-          <View style={styles.topicContainer}>
-            <Text
-              style={styles.topicText}
-            >Record a new entry</Text>
-          </View>
-          <View style={styles.titleContainer}>
-              <TextInput
-                  style = {styles.generalInput}
-                  placeholder = "Title"
-                  placeholderTextColor = '#7E7676'
-                  onChangeText = {(title) => {this.setState({...this.state, title: title})}}
-                  value = {this.state.title}
-              >
-              </TextInput>
-              {this.state.goodTitle ? null : titleError}
-          </View>
-          <View style={styles.generalInputContainer}>
-              <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showPurchaseDatePicker: !this.state.showPurchaseDatePicker})}>
-                  <Text style={this.checkDateColor(this.state.purchaseDate)}>{this.state.purchaseDate === '' ? 'Date of purchase' : moment(this.state.purchaseDate).format('MM/DD/YYYY')}</Text>
+    if(assetsLoaded) {
+      return (
+        <View style={styles.container}>
+          <Animated.ScrollView behavior="padding" style={[styles.container, { transform: [{translateY: shift}] }]}>
+          {/* <ScrollView style={styles.container} behavior="padding"> */}
+            <View style={styles.topicContainer}>
+              <Text
+                style={styles.topicText}
+              >Record a new entry</Text>
+            </View>
+            <View style={styles.titleContainer}>
+                <TextInput
+                    style = {styles.generalInput}
+                    placeholder = "Title"
+                    placeholderTextColor = '#7E7676'
+                    onChangeText = {(title) => {this.setState({...this.state, title: title})}}
+                    value = {this.state.title}
+                >
+                </TextInput>
+                {this.state.goodTitle ? null : titleError}
+            </View>
+            <View style={styles.generalInputContainer}>
+                <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showPurchaseDatePicker: !this.state.showPurchaseDatePicker})}>
+                    <Text style={this.checkDateColor(this.state.purchaseDate)}>{this.state.purchaseDate === '' ? 'Date of purchase' : moment(this.state.purchaseDate).format('MM/DD/YYYY')}</Text>
+                </TouchableOpacity>
+                {purchaseDatepicker}
+            </View>
+            <View style={styles.generalInputContainer}>
+                <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
+                    <Text style={this.checkDateColor(this.state.expireDate)}>{this.state.expireDate === '' ? 'Expire date' : moment(this.state.expireDate).format('MM/DD/YYYY')}</Text>
+                </TouchableOpacity>
+                {expireDatepicker}
+                {this.state.goodExpireDate ? null : expireDateError}
+            </View>
+            <View style={styles.pickerContainer}>
+                <RNPickerSelect
+                    placeholder={{
+                        label: 'Select a Category',
+                        value: null,
+                    }}
+                    placeholderTextColor= '#7E7676'
+                    items = {categoryItems}
+                    onValueChange={(category) => {
+                        this.setState({
+                            category: category
+                        });
+                    }}
+                    value={this.state.category}
+                />
+            </View>
+            <View style={styles.generalInputContainer}>
+                <TextInput
+                    style = {styles.generalInput}
+                    placeholder = "Add note"
+                    placeholderTextColor = '#7E7676'
+                    onChangeText = {(note) => {this.setState({...this.state, note: note})}}
+                    value = {this.state.note}
+                >
+                </TextInput>
+            </View>
+            <View style={styles.submitContainer}>
+              <TouchableOpacity style={styles.saveButton}>
+                  <Text style={styles.saveText}>Save</Text>
               </TouchableOpacity>
-              {purchaseDatepicker}
-          </View>
-          <View style={styles.generalInputContainer}>
-              <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
-                  <Text style={this.checkDateColor(this.state.expireDate)}>{this.state.expireDate === '' ? 'Expire date' : moment(this.state.expireDate).format('MM/DD/YYYY')}</Text>
-              </TouchableOpacity>
-              {expireDatepicker}
-              {this.state.goodExpireDate ? null : expireDateError}
-          </View>
-          <View style={styles.pickerContainer}>
-              <RNPickerSelect
-                  placeholder={{
-                      label: 'Select a Category',
-                      value: null,
-                  }}
-                  placeholderTextColor= '#7E7676'
-                  items = {categoryItems}
-                  onValueChange={(category) => {
-                      this.setState({
-                          category: category
-                      });
-                  }}
-                  value={this.state.category}
-              />
-          </View>
-          <View style={styles.generalInputContainer}>
-              <TextInput
-                  style = {styles.generalInput}
-                  placeholder = "Add note"
-                  placeholderTextColor = '#7E7676'
-                  onChangeText = {(note) => {this.setState({...this.state, note: note})}}
-                  value = {this.state.note}
-              >
-              </TextInput>
-          </View>
-          <View style={styles.submitContainer}>
-            <TouchableOpacity style={styles.saveButton}>
-                <Text style={styles.saveText}>Save</Text>
-            </TouchableOpacity>
-            <GradientButton
-              style={styles.submitButton}
-              gradientBegin="#F7DBC9"
-              gradientEnd='#53A386'
-              gradientDirection="vertical"
-              text="Submit"
-              radius = {15}
-              textStyle={styles.submitText}
-              onPressAction={() => this.onSubmit(this.state.title, this.state.expireDate, this.state.category)}
-            ></GradientButton>
-          </View>
-        {/* </ScrollView> */}
-        </Animated.ScrollView>
-      </View>
-    )
+              <GradientButton
+                style={styles.submitButton}
+                gradientBegin="#53A386"
+                gradientEnd='#53A386'
+                gradientDirection="vertical"
+                text="Submit"
+                radius = {15}
+                textStyle={styles.submitText}
+                onPressAction={() => this.onSubmit(this.state.title, this.state.expireDate, this.state.category)}
+              ></GradientButton>
+            </View>
+          {/* </ScrollView> */}
+          </Animated.ScrollView>
+        </View>
+      )
+    } else {
+      return null
+    }
   }
 }
 

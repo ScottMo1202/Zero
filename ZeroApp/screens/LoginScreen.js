@@ -11,6 +11,7 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      assetsLoaded: false,
       email: '', 
       password: '',
       goodEmail: true, 
@@ -27,11 +28,12 @@ export default class HomeScreen extends React.Component {
   //     }
   //   })
   // }
-  componentDidMount() {
-    Font.loadAsync({
+  async componentDidMount() {
+    await Font.loadAsync({
       'muli-bold': require('../assets/fonts/Muli-Bold.ttf'),
       'muli-regular': require('../assets/fonts/Muli-Regular.ttf')
     });
+    this.setState({assetsLoaded: true})
   }
   emailCallback = (email) => {
     this.setState({...this.state, email: email})
@@ -64,64 +66,69 @@ export default class HomeScreen extends React.Component {
 
   }
   render() {
+    const {assetsLoaded} = this.state
     const emailError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid email!</Text>
     const passwordError = <Text style={{paddingLeft: 6, color: 'red'}}>Please enter a valid password!</Text>
     const loginError = <Text style={{paddingLeft: 6, color: 'red'}}>Email or password not correct!</Text>
-    return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.titleContainer}>
-          <Text
-            style={styles.titleText}
-          >Log in to Zero</Text>
-        </View>
-        <View style={styles.emailContainer}>
-          <EmailInput emailCallback={this.emailCallback}></EmailInput>
-          {this.state.goodEmail ? null : emailError}
-        </View>
-        <View style={styles.passWordContainer}>
-          <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
-          {this.state.goodPassword ? null : passwordError}
-        </View>
-        <View style={styles.signUpContainer}
-        >
-          <Button 
-            title='New to Zero'
-            fontFamily='muli-regular'
-            color='#7e7676'
-            type='clear'
+    if(!assetsLoaded) {
+      return null
+    } else {
+      return (
+      <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          <View style={styles.titleContainer}>
+            <Text
+              style={styles.titleText}
+            >Log in to Zero</Text>
+          </View>
+          <View style={styles.emailContainer}>
+            <EmailInput emailCallback={this.emailCallback}></EmailInput>
+            {this.state.goodEmail ? null : emailError}
+          </View>
+          <View style={styles.passWordContainer}>
+            <PasswordInput passwordCallback={this.passwordCallback}></PasswordInput>
+            {this.state.goodPassword ? null : passwordError}
+          </View>
+          <View style={styles.signUpContainer}
+          >
+            <Button 
+              title='New to Zero'
+              fontFamily='muli-regular'
+              color='#7e7676'
+              type='clear'
 
-            onPress={() => {this.props.navigation.navigate('Signup')}}
-          />
-        </View>
-        <View style={styles.forgotContainer}
-        >
-          <Button 
-            title='Forget your password'
-            fontFamily='muli-regular'
-            color='#7e7676'
-            type='clear'
-            // onPress={() => {this.props.navigation.navigate('Manual Input')}}
-            onPress={() => {this.props.navigation.navigate('Home Screen')}} //for testing purpose
-          />
-        </View>
-        <View style={styles.loginContainer}>
-        {this.state.loginSuccess ? null : loginError}
-          <GradientButton
-            style={styles.loginScreenButton}
-            gradientBegin="#F7DBC9"
-            gradientEnd='#F79E8E'
-            gradientDirection="vertical"
-            text="Log in"
-            radius = {15}
-            textStyle={styles.loginText}
-            onPressAction={() => this.onLogin(this.state.email, this.state.password)}
-            >
-          </GradientButton>
-        </View>
-      </ScrollView>
-    </View>
-  );
+              onPress={() => {this.props.navigation.navigate('Signup')}}
+            />
+          </View>
+          <View style={styles.forgotContainer}
+          >
+            <Button 
+              title='Forget your password'
+              fontFamily='muli-regular'
+              color='#7e7676'
+              type='clear'
+              // onPress={() => {this.props.navigation.navigate('Manual Input')}}
+              onPress={() => {this.props.navigation.navigate('Home Screen2')}} //for testing purpose
+            />
+          </View>
+          <View style={styles.loginContainer}>
+          {this.state.loginSuccess ? null : loginError}
+            <GradientButton
+              style={styles.loginScreenButton}
+              gradientBegin="#53A386"
+              gradientEnd='#53A386'
+              gradientDirection="vertical"
+              text="Log in"
+              radius = {15}
+              textStyle={styles.loginText}
+              onPressAction={() => this.onLogin(this.state.email, this.state.password)}
+              >
+            </GradientButton>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
 }
 }
 
@@ -142,9 +149,9 @@ const styles = StyleSheet.create({
     titleText: {
       color: '#53A386',
       fontSize: 24,
+      fontFamily: 'muli-bold',
       width: 200,
       height: 33,
-      fontFamily: 'muli-bold',
     },
    emailContainer: {
     paddingTop: 50,

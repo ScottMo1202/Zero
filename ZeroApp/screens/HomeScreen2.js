@@ -28,6 +28,14 @@ export default class HomeScreen2 extends React.Component {
                         <View style={styles.intro}>
                             <Text style={[styles.title]}>Zero, an eco-friendly lifestyle.</Text>
                         </View>
+                        <View style={styles.contentContainer}>
+                            <View style={styles.whatson}>
+                                <Text style={{fontSize: 20, fontFamily: 'muli-bold', color:'#8B7777'}}>What's on Zero:</Text>
+                            </View>
+                        </View>
+                        <View style={styles.shadowContainer}>
+
+                        </View>
                     </ScrollView>
                 </View>
             )
@@ -53,5 +61,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'muli-bold',
         color: '#FFFFFF'
+    },
+    contentContainer: {
+        paddingTop: 0,
+        height: 273,
+        shadowColor: '#00000029',
+        shadowOpacity: 1.0,
+        shadowOffset: {
+            width: 2,
+            height: 0
+        },
+        shadowOpacity: 1.0
+    },
+    whatson: {
+        paddingLeft: 25,
+        paddingTop: 8
     }
 })

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, TouchableOpacity, Keyboard, UIManager, Animated} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, Button, TouchableOpacity, Keyboard, UIManager, Animated} from 'react-native';
 import GradientButton from 'react-native-gradient-buttons';
 import RNPickerSelect from 'react-native-picker-select'
 import * as Font from 'expo-font';
@@ -158,15 +158,20 @@ export default class ManualInputScreen extends React.Component {
             </View>
             <View style={styles.generalInputContainer}>
                 <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
-                    <Text style={this.checkDateColor(this.state.expireDate)}>{this.state.expireDate === '' ? 'Expire date' : moment(this.state.expireDate).format('MM/DD/YYYY')}</Text>
+                    <Text style={this.checkDateColor(this.state.expireDate)}>{this.state.expireDate === '' ? 'Expires in' : moment(this.state.expireDate).format('MM/DD/YYYY')}</Text>
                 </TouchableOpacity>
                 {expireDatepicker}
                 {this.state.goodExpireDate ? null : expireDateError}
             </View>
+            <View style={styles.cantFind}>
+              <TouchableOpacity>
+                <Text style={{fontFamily: 'muli-regular', color: '#53A386'}}>Can't find a specific date?</Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.pickerContainer}>
                 <RNPickerSelect
                     placeholder={{
-                        label: 'Select a Category',
+                        label: 'Category',
                         value: null,
                     }}
                     placeholderTextColor= '#7E7676'
@@ -239,6 +244,10 @@ const styles = StyleSheet.create({
       paddingLeft: 24,
       paddingRight: 24
     },
+    cantFind: {
+      paddingLeft: 40,
+      paddingTop: 8
+    },
     generalInput: {
       backgroundColor: '#FFFFFF',
       height: 50,
@@ -293,7 +302,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginLeft: 24,
         marginRight: 24,
-        marginTop: 16,
+        marginTop: 8,
         paddingLeft: 16
         // color: 'black',
     }

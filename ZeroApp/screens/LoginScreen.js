@@ -16,6 +16,7 @@ export default class HomeScreen extends React.Component {
       password: '',
       goodEmail: true, 
       goodPassword: true,
+      loginSuccess: true
     }
     this.emailCallback = this.emailCallback.bind(this)
     this.passwordCallback = this.passwordCallback.bind(this)

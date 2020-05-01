@@ -6,6 +6,8 @@ import LinksScreen from '../screens/LinksScreen';
 import ScanScreen from '../screens/ScanScreen';
 import LoginScreen from '../screens/LoginScreen'
 import ListScreen from '../screens/ListScreen';
+import firebase from '../components/firebase'
+import ProfileScreen from '../screens/ProfileScreen'
 import ManualInputScreen from '../screens/ManualInputScreen';
 import { StyleSheet, Text, View, BackHandler } from 'react-native';
 import HomeScreen2 from '../screens/HomeScreen2';
@@ -17,6 +19,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
+  const user = firebase.auth().currentUser
 
   return (
     <BottomTab.Navigator style={{backgroundColor: '#F6A192'}} initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={{
@@ -61,7 +64,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Profile"
-        component={LoginScreen}
+        component={user ? ProfileScreen : LoginScreen}
         options={{
           tabBarLabel:"",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/profile.png")} />,

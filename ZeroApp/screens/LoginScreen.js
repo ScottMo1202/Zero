@@ -58,7 +58,7 @@ export default class LoginScreen extends React.Component {
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then((data) => {
       this.setState({loginSuccess: true})
-      this.props.navigation.navigate('Home Screen')
+      this.props.navigation.navigate('Home')
     })
     .catch((error) => {
       this.setState({loginSuccess: false})
@@ -108,7 +108,6 @@ export default class LoginScreen extends React.Component {
               fontFamily='muli-regular'
               color='#7e7676'
               type='clear'
-              onPress={() => {this.props.navigation.navigate('Personal Info')}}
             />
           </View>
           <View style={styles.loginContainer}>

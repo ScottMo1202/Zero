@@ -15,6 +15,7 @@ import ScanScreen from './screens/ScanScreen';
 import ListScreen from './screens/ListScreen';
 import ProfileScreen from './screens/ProfileScreen'
 import firebse from 'firebase/app'
+import 'firebase/auth';
 import HomeScreen2 from './screens/HomeScreen2'
 const Stack = createStackNavigator();
 
@@ -23,6 +24,8 @@ export default function App(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
+  const user = firebse.auth().currentUser;
+  console.log(user)
   // Initialize Firebase
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
@@ -56,13 +59,13 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        {Platform.OS === 'ios' && <StatusBar barStyle="defau,lt" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Personal Info" component={ProfileScreen} />
+            <Stack.Screen name="Login" component={user ? ProfileScreen : LoginScreen} />
+            {/* <Stack.Screen name="Personal Info" component={ProfileScreen} /> */}
             {/* <Stack.Screen name="Home Screen" component={HomeScreen} /> */}
             <Stack.Screen name="Home Screen2" component={HomeScreen2} />
             <Stack.Screen name="Manual Input" component={ManualInputScreen} />

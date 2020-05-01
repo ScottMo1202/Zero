@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen'
 import ListScreen from '../screens/ListScreen';
 import ManualInputScreen from '../screens/ManualInputScreen';
 import { StyleSheet, Text, View, BackHandler } from 'react-native';
+import HomeScreen2 from '../screens/HomeScreen2';
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
 
@@ -28,7 +29,7 @@ export default function BottomTabNavigator({ navigation, route }) {
     }}>
       <BottomTab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeScreen2}
         options={{
           tabBarLabel:"",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require("../assets/icons/home.png")} />,

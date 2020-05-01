@@ -63,7 +63,7 @@ export default function App(props) {
             <Stack.Screen name="Signup" component={SignupScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Personal Info" component={ProfileScreen} />
-            <Stack.Screen name="Home Screen" component={HomeScreen} />
+            {/* <Stack.Screen name="Home Screen" component={HomeScreen} /> */}
             <Stack.Screen name="Home Screen2" component={HomeScreen2} />
             <Stack.Screen name="Manual Input" component={ManualInputScreen} />
             <Stack.Screen name="Scan Screen" component={ScanScreen} />

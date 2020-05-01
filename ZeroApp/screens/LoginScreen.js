@@ -7,7 +7,7 @@ import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 import firebase from '../components/firebase'
 import * as Font from 'expo-font';
-export default class HomeScreen extends React.Component {
+export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -108,8 +108,7 @@ export default class HomeScreen extends React.Component {
               fontFamily='muli-regular'
               color='#7e7676'
               type='clear'
-              // onPress={() => {this.props.navigation.navigate('Manual Input')}}
-              onPress={() => {this.props.navigation.navigate('Home Screen2')}} //for testing purpose
+              onPress={() => {this.props.navigation.navigate('Personal Info')}}
             />
           </View>
           <View style={styles.loginContainer}>
@@ -133,7 +132,7 @@ export default class HomeScreen extends React.Component {
 }
 }
 
-HomeScreen.navigationOptions = {
+LoginScreen.navigationOptions = {
   header: null,
 };
 

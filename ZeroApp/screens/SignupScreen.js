@@ -10,7 +10,7 @@ import firebase from '../components/firebase'
 // import 'firebase/auth';
 // import 'firebase/database';
 
-export default class HomeScreen extends React.Component {
+export default class SignupScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -40,7 +40,7 @@ export default class HomeScreen extends React.Component {
   passwordCallback = (password) => {
     this.setState({...this.state, password: password})
   }
-  onJoin(email, firstName, lastName, password) {
+  async onJoin(email, firstName, lastName, password) {
     let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
     if(emailReg.test(email) === false) {
       this.setState({...this.state, goodEmail: false})
@@ -66,16 +66,22 @@ export default class HomeScreen extends React.Component {
     } else {
       this.setState({goodPassword: true})
     }
-    firebase.auth().createUserWithEmailAndPassword(email, password) 
+    await firebase.auth().createUserWithEmailAndPassword(email, password) 
       .then((userCredentials) => {
         this.setState({doubleEmail: false})
-        let user = userCredentials.user
+        user = userCredentials.user
       })
       .catch((error) => {
         console.log(error.message)
         this.setState({doubleEmail: true})
       })
-    
+      let user = firebase.auth().currentUser;
+      await user.updateProfile({
+        displayName: firstName + ' ' + lastName,
+      }).then(function() {
+      }).catch(function(error) {
+      });
+      console.log(user)
   }
   // validateForm(email, firstName, lastName, password) {
   //   let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
@@ -188,7 +194,7 @@ export default class HomeScreen extends React.Component {
 }
 }
 
-HomeScreen.navigationOptions = {
+SignupScreen.navigationOptions = {
   header: null,
 };
 

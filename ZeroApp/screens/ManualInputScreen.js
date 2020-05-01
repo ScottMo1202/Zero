@@ -90,6 +90,9 @@ export default class ManualInputScreen extends React.Component {
       this.setState({goodExpireDate: true})
     }
   }
+  purchaseDate() {
+
+  }
   checkDateColor(date) {
     if(date === '') {
       return {color: '#7E7676', paddingTop: 16}
@@ -145,20 +148,26 @@ export default class ManualInputScreen extends React.Component {
                     placeholder = "Title"
                     placeholderTextColor = '#7E7676'
                     onChangeText = {(title) => {this.setState({...this.state, title: title})}}
-                    value = {this.state.title}
+                    value = {this.props.title ? this.state.title : this.state.title}
                 >
                 </TextInput>
                 {this.state.goodTitle ? null : titleError}
             </View>
             <View style={styles.generalInputContainer}>
                 <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showPurchaseDatePicker: !this.state.showPurchaseDatePicker})}>
-                    <Text style={this.checkDateColor(this.state.purchaseDate)}>{this.state.purchaseDate === '' ? 'Date of purchase' : moment(this.state.purchaseDate).format('MM/DD/YYYY')}</Text>
+                    <Text style={this.checkDateColor(this.props.purchaseDate ? 
+                      this.props.purchaseDate : this.state.purchaseDate)}>{(!this.props.purchaseDate && 
+                      this.state.purchaseDate === '') ? 'Date of purchase' : moment(this.props.purchaseDate ? 
+                      this.props.purchaseDate : this.state.purchaseDate).format('MM/DD/YYYY')}</Text>
                 </TouchableOpacity>
                 {purchaseDatepicker}
             </View>
             <View style={styles.generalInputContainer}>
                 <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
-                    <Text style={this.checkDateColor(this.state.expireDate)}>{this.state.expireDate === '' ? 'Expires in' : moment(this.state.expireDate).format('MM/DD/YYYY')}</Text>
+                    <Text style={this.checkDateColor(this.props.expireDate ? 
+                      this.props.expireDate : this.state.expireDate)}>{(!this.props.expireDate && 
+                      this.state.expireDate === '') ? 'Date of purchase' : moment(this.props.expireDate ? 
+                      this.props.expireDate : this.state.expireDate).format('MM/DD/YYYY')}</Text>
                 </TouchableOpacity>
                 {expireDatepicker}
                 {this.state.goodExpireDate ? null : expireDateError}
@@ -181,7 +190,7 @@ export default class ManualInputScreen extends React.Component {
                             category: category
                         });
                     }}
-                    value={this.state.category}
+                    value={this.props.category ? this.props.category : this.state.category}
                 />
             </View>
             <View style={styles.generalInputContainer}>
@@ -190,7 +199,7 @@ export default class ManualInputScreen extends React.Component {
                     placeholder = "Add note"
                     placeholderTextColor = '#7E7676'
                     onChangeText = {(note) => {this.setState({...this.state, note: note})}}
-                    value = {this.state.note}
+                    value = {this.props.note ? this.state.note : this.state.note}
                 >
                 </TextInput>
             </View>

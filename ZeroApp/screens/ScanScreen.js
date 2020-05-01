@@ -42,6 +42,11 @@ export default function ScanScreen() {
     return <Text>No access to camera</Text>;
   }
 
+  const handleRescan = () => {
+    setScanned(false);
+    setModalVisible(false);
+  }
+
   return (
     <View
       style={{
@@ -63,7 +68,7 @@ export default function ScanScreen() {
         style={StyleSheet.absoluteFillObject}
       />
 
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+      {scanned && <Button title={'Tap to Scan Again'} onPress={handleRescan} />}
     </View>
   );
 }

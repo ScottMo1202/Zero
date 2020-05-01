@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,7 +13,9 @@ import LoginScreen from './screens/LoginScreen'
 import useLinking from './navigation/useLinking';
 import ScanScreen from './screens/ScanScreen';
 import ListScreen from './screens/ListScreen';
+import ProfileScreen from './screens/ProfileScreen'
 import firebse from 'firebase/app'
+import HomeScreen2 from './screens/HomeScreen2'
 const Stack = createStackNavigator();
 
 export default function App(props) {
@@ -29,12 +32,11 @@ export default function App(props) {
 
         // Load our initial navigation state
         setInitialNavigationState(await getInitialState());
-
         // Load fonts
         await Font.loadAsync({
-          ...Ionicons.font,
           'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-          'sofia-pro': require('./assets/fonts/sofiapro-light.otf')
+          'sofia-pro': require('./assets/fonts/sofiapro-light.otf'),
+          'muli-bold': require('./assets/fonts/Muli-Bold.ttf')
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
@@ -48,6 +50,7 @@ export default function App(props) {
     loadResourcesAndDataAsync();
   }, []);
 
+
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
   } else {
@@ -59,7 +62,9 @@ export default function App(props) {
             <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="Signup" component={SignupScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Personal Info" component={ProfileScreen} />
             <Stack.Screen name="Home Screen" component={HomeScreen} />
+            <Stack.Screen name="Home Screen2" component={HomeScreen2} />
             <Stack.Screen name="Manual Input" component={ManualInputScreen} />
             <Stack.Screen name="Scan Screen" component={ScanScreen} />
             <Stack.Screen name="List Screen" component={ListScreen} />

@@ -15,13 +15,14 @@ export class PasswordInput extends React.Component {
         return (
             <TextInput
                 style = {{
+                    fontFamily: "muli-regular",
                     backgroundColor: '#FFFFFF',
                     height: 327,
                     height: 50,
                     borderWidth: 1,
                     borderRadius: 15,
                     paddingLeft: 16,
-                    borderColor: '#F79E8E'
+                    borderColor: '#53A386',
                 }}
                 placeholder = "Password"
                 placeholderTextColor = '#7E7676'

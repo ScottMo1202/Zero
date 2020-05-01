@@ -1,11 +1,7 @@
 import * as React from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import * as WebBrowser from 'expo-web-browser';
-import GradientButton from 'react-native-gradient-buttons';
-import { EmailInput } from '../components/EmailInput';
-import { PasswordInput } from '../components/PasswordInput';
 import firebase from '../components/firebase'
 import * as Font from 'expo-font';
 import { withNavigation } from 'react-navigation';
@@ -15,6 +11,7 @@ export default class ProfileScreen extends React.Component {
         this.state = {
             assetsLoaded: false
         }
+        this.onSignOut = this.onSignOut.bind(this)
     }
     async componentDidMount() {
         await Font.loadAsync({
@@ -22,6 +19,12 @@ export default class ProfileScreen extends React.Component {
           'muli-regular': require('../assets/fonts/Muli-Regular.ttf')
         });
         this.setState({assetsLoaded: true})
+    }
+    onSignOut() {
+        firebase.auth().signOut()
+            .then(() => {
+                this.props.navigation.navigate('Home')
+            })
     }
     render() {
         const user = firebase.auth().currentUser;
@@ -72,7 +75,7 @@ export default class ProfileScreen extends React.Component {
                         />
                     </View>
                     <View style={styles.logoutContainer}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.onSignOut}>
                             <Text style={styles.logout}>Log Out</Text>
                         </TouchableOpacity>
                         <View

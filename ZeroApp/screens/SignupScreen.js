@@ -78,10 +78,11 @@ export default class SignupScreen extends React.Component {
       let user = firebase.auth().currentUser;
       await user.updateProfile({
         displayName: firstName + ' ' + lastName,
-      }).then(function() {
+      }).then(function(e) {
       }).catch(function(error) {
       });
-      console.log(user)
+      this.props.navigation.navigate('Home')
+      
   }
   // validateForm(email, firstName, lastName, password) {
   //   let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;

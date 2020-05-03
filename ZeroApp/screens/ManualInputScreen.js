@@ -200,24 +200,11 @@ export default class ManualInputScreen extends React.Component {
 
             {/* manual input - Purchase Date */}
             <View style={styles.generalInputContainer}>
-                <TouchableOpacity 
-                  style={styles.generalInput} 
-                  onPress={() => this.setState((currentState) => {
-                      let stateChanges = {
-                        showPurchaseDatePicker: !this.state.showPurchaseDatePicker,
-                        purchaseDate: moment(this.props.purchaseDate ? 
-                          this.props.purchaseDate : this.state.purchaseDate).format('MM/DD/YYYY')
-                      };
-                      return stateChanges;
-                      })}>
-
-                    <Text
-                      style={this.checkDateColor(this.props.purchaseDate ? this.props.purchaseDate : this.state.purchaseDate)}>
-
-                      {(!this.props.purchaseDate && 
-                      this.state.purchaseDate === '') ? 'Purchase Date' : moment(this.props.purchaseDate ? 
-                      this.props.purchaseDate : this.state.purchaseDate).format('MM/DD/YYYY')}
-                    </Text>
+                <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showPurchaseDatePicker: !this.state.showPurchaseDatePicker})}>
+                    <Text style={this.checkDateColor(this.props.purchaseDate ? 
+                      this.props.purchaseDate : this.state.purchaseDate)}>{(!this.props.purchaseDate && 
+                      this.state.purchaseDate === '') ? 'Date of purchase' : moment(this.props.purchaseDate ? 
+                      this.props.purchaseDate : this.state.purchaseDate).format('MM/DD/YYYY')}</Text>
                 </TouchableOpacity>
                 {purchaseDatepicker}
             </View>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, TouchableOpacity, Keyboard, UIManager, Animated} from 'react-native';
+import firebase from '../components/firebase'
 
 export default function ListScreen() {
 

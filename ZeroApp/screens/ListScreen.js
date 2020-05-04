@@ -83,6 +83,7 @@ export default class ListScreen extends React.Component {
       return <ItemInfo key={eachItem.id} 
                         itemName={eachItem.title} 
                         categName={eachItem.category} 
+                        note={eachItem.note}
                         purchaseDate={eachItem.purchaseDate}
                         expireDate={eachItem.expireDate}
               />
@@ -118,7 +119,6 @@ export default class ListScreen extends React.Component {
 class ItemInfo extends React.Component {
   render() {
     const dateDiff = new Date(this.props.expireDate).getTime() - new Date(this.props.purchaseDate).getTime(); 
-    // const expDate = new Date(this.props.expireDate).getTime(); 
     const daysDiff = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
     
     return (
@@ -126,6 +126,7 @@ class ItemInfo extends React.Component {
           <View style={styles.itemColumn}>
           <Text style={styles.itemTitleText}>{this.props.itemName}</Text>
           <Text style={styles.itemCategoryText}>{this.props.categName}</Text>
+          <Text style={styles.itemNoteText}>{this.props.note}</Text>
           <Text style={styles.itemCategoryText}>{this.props.expireDate}</Text>
           </View>
           <View style={styles.itemColumn}>
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
         color: '#7E7676',
         fontSize: 17,
         textAlign: "left",
-        marginBottom: 50
+        marginBottom: 5
     },
     titleContainer: {
         margin: 25,
@@ -208,5 +209,10 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 20,
         color: '#A9A9A9'
+      },
+      itemNoteText: {
+        marginLeft: 12,
+        color: '#A9A9A9',
+        marginBottom: 26
       }
 })

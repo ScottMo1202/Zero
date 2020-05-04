@@ -179,6 +179,7 @@ export default class ManualInputScreen extends React.Component {
                                     onDateChange={(expireDate) => this.setState({expireDate})}/> : null
     const titleError = <Text style={{paddingLeft: 6, color: 'red'}}>The title is required!</Text>
     const expireDateError = <Text style={{paddingLeft: 6, color: 'red'}}>The expire date is required!</Text>
+    
     if (assetsLoaded) {
       return (
         <View style={styles.container}>

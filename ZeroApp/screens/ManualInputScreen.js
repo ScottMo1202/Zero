@@ -10,8 +10,11 @@ const { State: TextInputState } = TextInput;
 
 export default class ManualInputScreen extends React.Component {
   constructor(props) {
+    const currUser = firebase.auth().currentUser;
+    
     super(props)
     this.state = {
+      currentUser: currUser ? currUser.uid : "None",
       assetsLoaded: false,
       title: '',
       purchaseDate: '',
@@ -109,21 +112,23 @@ export default class ManualInputScreen extends React.Component {
     // event.preventDefault(); // prevent the default behavior of the form
 
     const itemsRef = firebase.database().ref('items');
+    const currUser = firebase.auth().currentUser;
 
     const newItem = {
-      // user: this.state.user.uid,
-      title: this.state.title,
-      purchaseDate: this.state.purchaseDate,
-      expireDate: this.state.expireDate,
-      category: this.state.category,
-      note: this.state.note
+      // uid for the currentUser
+      currentUser: currUser ? currUser.uid : "None",
+      title: String(this.state.title),
+      purchaseDate: String(this.state.purchaseDate).slice(0,15),
+      expireDate: String(this.state.expireDate).slice(0,15),
+      category: String(this.state.category),
+      note: String(this.state.note)
     }
     // push the new item to firebase db
     itemsRef.push(newItem);
     
     //empty out for next time
     this.setState({
-      // user: this.props.currentUser,
+      currentUser: currUser ? currUser.uid : "None",
       title: "",
       purchaseDate: "",
       expireDate: "",

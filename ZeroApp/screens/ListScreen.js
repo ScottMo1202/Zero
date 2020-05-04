@@ -118,7 +118,7 @@ export default class ListScreen extends React.Component {
 // for each displayed item
 class ItemInfo extends React.Component {
   render() {
-    const dateDiff = new Date(this.props.expireDate).getTime() - new Date(this.props.purchaseDate).getTime(); 
+    const dateDiff = new Date(this.props.expireDate).getTime() - new Date().getTime(); 
     const daysDiff = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
     
     return (

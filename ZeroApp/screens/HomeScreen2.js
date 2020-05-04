@@ -170,7 +170,7 @@ class ItemSection extends React.Component {
         // get the item(s) with minimum leftDate
         const minDays = this.getMinLeftDate(items);
         let displayedItems = items.filter((item) => {
-            if (item.leftDate == minDays) {
+            if (item.leftDate == minDays && String(item.currentUser) == this.props.currentUser) {
                 return item;
             }
         });

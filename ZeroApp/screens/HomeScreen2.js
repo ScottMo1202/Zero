@@ -181,6 +181,7 @@ class ItemSection extends React.Component {
                             itemName={eachItem.title} 
                             categName={eachItem.category} 
                             note={eachItem.note}
+                            expireDate={String(eachItem.expireDate)}
                             leftDate={eachItem.leftDate}
                     />
         });

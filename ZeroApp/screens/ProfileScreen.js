@@ -13,6 +13,7 @@ export default class ProfileScreen extends React.Component {
         }
         this.onSignOut = this.onSignOut.bind(this)
     }
+
     async componentDidMount() {
         await Font.loadAsync({
           'muli-bold': require('../assets/fonts/Muli-Bold.ttf'),
@@ -20,12 +21,14 @@ export default class ProfileScreen extends React.Component {
         });
         this.setState({assetsLoaded: true})
     }
+    
     onSignOut() {
         firebase.auth().signOut()
             .then(() => {
                 this.props.navigation.navigate('Home')
             })
     }
+
     render() {
         const user = firebase.auth().currentUser;
         const {assetsLoaded} = this.state

@@ -7,6 +7,7 @@ import { EmailInput } from '../components/EmailInput';
 import { PasswordInput } from '../components/PasswordInput';
 import firebase from '../components/firebase'
 import * as Font from 'expo-font';
+
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props)

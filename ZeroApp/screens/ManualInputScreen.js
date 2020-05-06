@@ -3,12 +3,18 @@ import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, Button, T
 import GradientButton from 'react-native-gradient-buttons';
 import RNPickerSelect from 'react-native-picker-select'
 import * as Font from 'expo-font';
+
+import firebase from '../components/firebase'
+
 const { State: TextInputState } = TextInput;
 
 export default class ManualInputScreen extends React.Component {
   constructor(props) {
+    const currUser = firebase.auth().currentUser;
+    
     super(props)
     this.state = {
+      currentUser: currUser ? currUser.uid : "None",
       assetsLoaded: false,
       title: '',
       purchaseDate: '',
@@ -22,17 +28,22 @@ export default class ManualInputScreen extends React.Component {
       goodExpireDate: true,
       shift: new Animated.Value(0)
     }
-    this.handleKeyboardDidHide = this.handleKeyboardDidHide.bind(this)
-    this.handleKeyboardDidShow = this.handleKeyboardDidShow.bind(this)
+    this.handleKeyboardDidHide = this.handleKeyboardDidHide.bind(this);
+    this.handleKeyboardDidShow = this.handleKeyboardDidShow.bind(this);
+    this.submitItemInfo = this.submitItemInfo.bind(this);
   }
 
   async componentDidMount() {
+    // fetch group data from firebase
+    this.itemsRef = firebase.database().ref('items');
+
     await Font.loadAsync({
       'muli-bold': require('../assets/fonts/Muli-Bold.ttf'),
       'muli-regular': require('../assets/fonts/Muli-Regular.ttf')
     });
     this.setState({assetsLoaded: true})
   }
+
   componentWillMount() {
     this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow);
     this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide)
@@ -41,6 +52,9 @@ export default class ManualInputScreen extends React.Component {
   componentWillUnmount() {
     this.keyboardDidShowSub.remove();
     this.keyboardDidHideSub.remove();
+
+    // stop fetching data from firebase
+    this.itemsRef.off();
   }
 
   handleKeyboardDidShow(event) {
@@ -75,31 +89,64 @@ export default class ManualInputScreen extends React.Component {
       }
     ).start();
   }
-  onSubmit(title, expireDate) {
-      this.validateForm(title, expireDate)
-  }
-  validateForm(title, expireDate) {
-    if(title === '') {
-      this.setState({goodTitle: false})
-    } else {
-      this.setState({goodTitle: true})
-    }
-    if(expireDate === '') {
-      this.setState({goodExpireDate: false})
-    } else {
-      this.setState({goodExpireDate: true})
-    }
-  }
-  purchaseDate() {
 
+  /* From Scott, remain the code just in case need to use them later */
+  // onSubmit(title, expireDate) {
+  //     this.validateForm(title, expireDate)
+  // }
+  // validateForm(title, expireDate) {
+  //   if (title === '') {
+  //     this.setState({goodTitle: false})
+  //   } else {
+  //     this.setState({goodTitle: true})
+  //   }
+  //   if (expireDate === '') {
+  //     this.setState({goodExpireDate: false})
+  //   } else {
+  //     this.setState({goodExpireDate: true})
+  //   }
+  // }
+
+  // the function is used to trigger the submit event for submitting item's information
+  submitItemInfo = () => {
+    // event.preventDefault(); // prevent the default behavior of the form
+
+    const itemsRef = firebase.database().ref('items');
+    const currUser = firebase.auth().currentUser;
+
+    const newItem = {
+      // uid for the currentUser
+      currentUser: currUser ? currUser.uid : "None",
+      title: String(this.state.title),
+      purchaseDate: String(this.state.purchaseDate).slice(0,15),
+      expireDate: String(this.state.expireDate).slice(0,15),
+      category: String(this.state.category),
+      note: String(this.state.note)
+    }
+    // push the new item to firebase db
+    itemsRef.push(newItem);
+    
+    //empty out for next time
+    this.setState({
+      currentUser: currUser ? currUser.uid : "None",
+      title: "",
+      purchaseDate: "",
+      expireDate: "",
+      category: "",
+      note: ""
+    });
+
+    alert('You have saved the new item!')
   }
+
   checkDateColor(date) {
-    if(date === '') {
+    if (date === '') {
       return {color: '#7E7676', paddingTop: 16}
     } else {
       return {color: 'black', paddingTop: 16}
     }
   }
+
   render() {
     const {assetsLoaded} = this.state;
     const { shift } = this.state;
@@ -147,6 +194,8 @@ export default class ManualInputScreen extends React.Component {
                 style={styles.topicText}
               >Record a new entry</Text>
             </View>
+
+            {/* manual input -  Item Name */}
             <View style={styles.titleContainer}>
                 <TextInput
                     style = {styles.generalInput}
@@ -158,6 +207,8 @@ export default class ManualInputScreen extends React.Component {
                 </TextInput>
                 {this.state.goodTitle ? null : titleError}
             </View>
+
+            {/* manual input - Purchase Date */}
             <View style={styles.generalInputContainer}>
                 <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showPurchaseDatePicker: !this.state.showPurchaseDatePicker})}>
                     <Text style={this.checkDateColor(this.props.purchaseDate ? 
@@ -167,21 +218,26 @@ export default class ManualInputScreen extends React.Component {
                 </TouchableOpacity>
                 {purchaseDatepicker}
             </View>
+
+            {/* manual input - Expiration Date */}
             <View style={styles.generalInputContainer}>
                 <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
                     <Text style={this.checkDateColor(this.props.expireDate ? 
                       this.props.expireDate : this.state.expireDate)}>{(!this.props.expireDate && 
-                      this.state.expireDate === '') ? 'Date of purchase' : moment(this.props.expireDate ? 
+                      this.state.expireDate === '') ? 'Expiration Date' : moment(this.props.expireDate ? 
                       this.props.expireDate : this.state.expireDate).format('MM/DD/YYYY')}</Text>
                 </TouchableOpacity>
                 {expireDatepicker}
                 {this.state.goodExpireDate ? null : expireDateError}
             </View>
+
             <View style={styles.cantFind}>
               <TouchableOpacity>
                 <Text style={{fontFamily: 'muli-regular', color: '#53A386'}}>Can't find a specific date?</Text>
               </TouchableOpacity>
             </View>
+            
+            {/* manual input - Category */}
             <View style={styles.pickerContainer}>
                 <RNPickerSelect
                     placeholder={{
@@ -198,20 +254,26 @@ export default class ManualInputScreen extends React.Component {
                     value={this.props.category ? this.props.category : this.state.category}
                 />
             </View>
+
+            {/* manual input - Notes */}
             <View style={styles.generalInputContainer}>
                 <TextInput
                     style = {styles.generalInput}
-                    placeholder = "Add note"
+                    placeholder = "Notes"
                     placeholderTextColor = '#7E7676'
                     onChangeText = {(note) => {this.setState({...this.state, note: note})}}
                     value = {this.props.note ? this.state.note : this.state.note}
                 >
                 </TextInput>
             </View>
+
+            {/* manual input - Submit */}
+            {/* ignore Save at this time */}
             <View style={styles.submitContainer}>
               <TouchableOpacity style={styles.saveButton}>
                   <Text style={styles.saveText}>Save</Text>
               </TouchableOpacity>
+
               <GradientButton
                 style={styles.submitButton}
                 gradientBegin="#53A386"
@@ -220,7 +282,8 @@ export default class ManualInputScreen extends React.Component {
                 text="Submit"
                 radius = {15}
                 textStyle={styles.submitText}
-                onPressAction={() => this.onSubmit(this.state.title, this.state.expireDate, this.state.category)}
+                // onPressAction={() => this.onSubmit(this.state.title, this.state.expireDate, this.state.category)}
+                onPressAction={this.submitItemInfo}
               ></GradientButton>
             </View>
           {/* </ScrollView> */}

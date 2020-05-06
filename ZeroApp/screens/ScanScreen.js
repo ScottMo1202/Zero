@@ -1,51 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import { Text, View, StyleSheet, Button} from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import ScanInfoModal from './ScanInfoModal';
+// import ScanInfoModal from './ScanInfoModal';
 import Spinner from 'react-native-loading-spinner-overlay';
-export default function ScanScreen() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [data, setData] = useState();
-  
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
+export default class ScanScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasPermission: 'granted',
+      scanned: false,
+      isLoading: false,
+    }
+  } 
+  componentDidUpdate(){
+    {
+      (async () => {
+        const { status } = await BarCodeScanner.requestPermissionsAsync();
+        this.setState({hasPermissions: status === 'granted'});
+      })();
+    }
+  }
+  render(){
+  const { navigation } = this.props;
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await BarCodeScanner.requestPermissionsAsync();
+  //     this.setState({hasPermissions: status === 'granted'});
+  //   })();
+  // }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    setIsLoading(true);
+    // this.setState({scanned: true});
+    this.setState({isLoading: true});
     fetch("https://api.upcitemdb.com/prod/trial/lookup?upc=" + data, {
       "method": "GET"
     })
     .then((response) => response.json())
     .then(data => {
       console.log(data);
-      setIsLoading(false);
-      setModalVisible(true);
-      setData(data.items[0]);
+      this.setState({isLoading: false});
+      // setTimeout(navigation.navigate('Manual Input', {
+      //   title: data.items[0].title
+      // }), 1000);
+      navigation.navigate('Manual Input', {
+        title: data.items[0].title
+      })
     })
     .catch(err => {
       console.log(err);
     });
   };
 
-  if (hasPermission === null) {
+  if (this.state.hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
-  if (hasPermission === false) {
+  if (this.state.hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
 
-  const handleRescan = () => {
-    setScanned(false);
-    setModalVisible(false);
-  }
+  // const handleRescan = () => {
+  //   this.setState({scanned: false});
+  // }
 
   return (
     <View
@@ -54,23 +69,23 @@ export default function ScanScreen() {
         flexDirection: 'column',
         justifyContent: 'flex-end',
       }}>
-      {modalVisible && <ScanInfoModal data={data}/>}
       <Spinner
         //visibility of Overlay Loading Spinner
-        visible={isLoading}
+        visible={this.state.isLoading}
         //Text with the Spinner
         textContent={'Barcode scanned!  Loading...'}
         //Text style of the Spinner Text
         textStyle={styles.spinnerTextStyle}
       />
       <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        onBarCodeScanned={this.state.scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
 
-      {scanned && <Button title={'Tap to Scan Again'} onPress={handleRescan} />}
+      {/* {this.state.scanned && <Button title={'Tap to Scan Again'} onPress={handleRescan} />} */}
     </View>
   );
+}
 }
 
 const styles = StyleSheet.create({

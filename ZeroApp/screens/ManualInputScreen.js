@@ -103,6 +103,7 @@ export default class ManualInputScreen extends React.Component {
   render() {
     const {assetsLoaded} = this.state;
     const { shift } = this.state;
+    // const { navigation } = this.props;
     const categoryItems = [{
       label: 'Food',
       value: 'Food',
@@ -132,6 +133,10 @@ export default class ManualInputScreen extends React.Component {
                                     onDateChange={(expireDate) => this.setState({expireDate})}/> : null
     const titleError = <Text style={{paddingLeft: 6, color: 'red'}}>The title is required!</Text>
     const expireDateError = <Text style={{paddingLeft: 6, color: 'red'}}>The expire date is required!</Text>
+    const {route} = this.props;
+    console.log(route.params)
+    // const { title } = route.params.title;
+
     if(assetsLoaded) {
       return (
         <View style={styles.container}>
@@ -145,10 +150,10 @@ export default class ManualInputScreen extends React.Component {
             <View style={styles.titleContainer}>
                 <TextInput
                     style = {styles.generalInput}
-                    placeholder = "Title"
+                    placeholder = {(route.params && route.params.title) ? route.params.title : "Title"}
                     placeholderTextColor = '#7E7676'
                     onChangeText = {(title) => {this.setState({...this.state, title: title})}}
-                    value = {this.props.title ? this.state.title : this.state.title}
+                    value = {(route.params && route.params.title) ? route.params.title : this.state.title}
                 >
                 </TextInput>
                 {this.state.goodTitle ? null : titleError}

@@ -15,7 +15,7 @@ export default class ListScreen extends React.Component {
     };
   }
 
-  // fetch items data from firebase
+  // fetch items data from firebase 
   async componentDidMount() {
     this.itemsRef = firebase.database().ref('items');
     this.itemsRef.on('value', (content) => {

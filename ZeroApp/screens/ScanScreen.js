@@ -39,9 +39,6 @@ export default class ScanScreen extends React.Component {
     .then(data => {
       console.log(data);
       this.setState({isLoading: false});
-      // setTimeout(navigation.navigate('Manual Input', {
-      //   title: data.items[0].title
-      // }), 1000);
       navigation.navigate('Manual Input', {
         title: data.items[0].title
       })

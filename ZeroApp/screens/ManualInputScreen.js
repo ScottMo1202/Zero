@@ -3,8 +3,11 @@ import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, Button, T
 import GradientButton from 'react-native-gradient-buttons';
 import RNPickerSelect from 'react-native-picker-select'
 import * as Font from 'expo-font';
-
+import * as FoodDB from '../assets/json/food.json'
+import Fuse from 'fuse.js'
+import * as MakeupDB from '../assets/json/makeup.json'
 import firebase from '../components/firebase'
+const FoodDB2 = FoodDB.Sheet2;
 
 const { State: TextInputState } = TextInput;
 
@@ -26,7 +29,9 @@ export default class ManualInputScreen extends React.Component {
       showCategoryPicker: false,
       goodTitle: true,
       goodExpireDate: true,
-      shift: new Animated.Value(0)
+      shift: new Animated.Value(0),
+      storingOption: '',
+      recommandedTime:'',
     }
     this.handleKeyboardDidHide = this.handleKeyboardDidHide.bind(this);
     this.handleKeyboardDidShow = this.handleKeyboardDidShow.bind(this);
@@ -147,6 +152,42 @@ export default class ManualInputScreen extends React.Component {
     }
   }
 
+  searchFood(title){
+    const options = {
+      isCaseSensitive: false,
+      // includeScore: false,
+      // shouldSort: true,
+      // includeMatches: false,
+      // findAllMatches: false,
+      // minMatchCharLength: 1,
+      // location: 0,
+      // threshold: 0.6,
+      // distance: 100,
+      // useExtendedSearch: false,
+      keys: [
+        "Food"
+      ]
+    };
+    const fuse = new Fuse(FoodDB2, options);
+    
+    // Change the pattern
+    const pattern = title;
+    const result = fuse.search(pattern);
+    if (result.length === 0){
+      return null;
+    }
+
+    console.log(result)
+
+    if (this.state.storingOption === "Room Temprature"){
+      return result[0].item.room_temp;
+    } else if (this.state.storingOption === "Refrigerator Storage"){
+      return result[0].item.fridge;
+    } else {
+      return result[0].item.freezer;
+    }
+  }
+
   render() {
     const {assetsLoaded} = this.state;
     const { shift } = this.state;
@@ -167,6 +208,21 @@ export default class ManualInputScreen extends React.Component {
       label: 'Personal Care',
       value: 'Personnal Care',
     }]
+
+    const chooseStoringOption =[
+      {
+        label: 'Room Temprature',
+        value: 'Room Temprature',
+      },
+      {
+        label: 'Refrigerator Storage',
+        value: 'Refrigerator Storage',
+      },
+      {
+        label: 'Freezer Storage',
+        value: 'Freezer Storage',
+      }
+    ]
     let moment = require('moment')
     let purchaseDatepicker = this.state.showPurchaseDatePicker ? 
                       <DatePickerIOS style={{ height: 150 }}
@@ -220,7 +276,7 @@ export default class ManualInputScreen extends React.Component {
             </View>
 
             {/* manual input - Expiration Date */}
-            <View style={styles.generalInputContainer}>
+            {/* <View style={styles.generalInputContainer}>
                 <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
                     <Text style={this.checkDateColor(this.props.expireDate ? 
                       this.props.expireDate : this.state.expireDate)}>{(!this.props.expireDate && 
@@ -229,13 +285,13 @@ export default class ManualInputScreen extends React.Component {
                 </TouchableOpacity>
                 {expireDatepicker}
                 {this.state.goodExpireDate ? null : expireDateError}
-            </View>
+            </View> */}
 
-            <View style={styles.cantFind}>
+            {/* <View style={styles.cantFind}>
               <TouchableOpacity>
                 <Text style={{fontFamily: 'muli-regular', color: '#53A386'}}>Can't find a specific date?</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
             
             {/* manual input - Category */}
             <View style={styles.pickerContainer}>
@@ -253,6 +309,51 @@ export default class ManualInputScreen extends React.Component {
                     }}
                     value={this.props.category ? this.props.category : this.state.category}
                 />
+            </View>
+            {/*choose room / fridge / freeze */}
+            {this.state.category === "Food" && <View>
+            <View style={styles.pickerContainer}>
+                <RNPickerSelect
+                    placeholder={{
+                        label: 'Storing Option',
+                        value: null,
+                    }}
+                    placeholderTextColor= '#7E7676'
+                    items = {chooseStoringOption}
+                    onValueChange={(option) => {
+                        this.setState({
+                            storingOption: option
+                        });
+                    }}
+                    value={this.props.category ? this.props.category : this.state.storingOption}
+                />
+            </View>
+
+            <View style={styles.cantFind}>
+              <TouchableOpacity>
+                <Text style={{fontFamily: 'muli-regular', color: '#53A386'}}>Our recommanded time is: {this.searchFood(this.state.title)}</Text>
+              </TouchableOpacity>
+            </View>
+
+            </View>}
+
+
+            {/* manual input - Expiration Date */}
+            <View style={styles.generalInputContainer}>
+                <TouchableOpacity style={styles.generalInput} onPress={() => this.setState({showExpireDatePicker: !this.state.showExpireDatePicker})}>
+                    <Text style={this.checkDateColor(this.props.expireDate ? 
+                      this.props.expireDate : this.state.expireDate)}>{(!this.props.expireDate && 
+                      this.state.expireDate === '') ? 'Expiration Date' : moment(this.props.expireDate ? 
+                      this.props.expireDate : this.state.expireDate).format('MM/DD/YYYY')}</Text>
+                </TouchableOpacity>
+                {expireDatepicker}
+                {this.state.goodExpireDate ? null : expireDateError}
+            </View>
+
+            <View style={styles.cantFind}>
+              <TouchableOpacity>
+                <Text style={{fontFamily: 'muli-regular', color: '#53A386'}}>Can't find a specific date?</Text>
+              </TouchableOpacity>
             </View>
 
             {/* manual input - Notes */}

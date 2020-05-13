@@ -14,6 +14,7 @@ import useLinking from './navigation/useLinking';
 import ScanScreen from './screens/ScanScreen';
 import ListScreen from './screens/ListScreen';
 import ProfileScreen from './screens/ProfileScreen'
+import ItemScreen from './screens/ItemScreen'
 import firebse from 'firebase/app'
 import 'firebase/auth';
 import HomeScreen2 from './screens/HomeScreen2'
@@ -71,6 +72,7 @@ export default function App(props) {
             <Stack.Screen name="Manual Input" component={ManualInputScreen} />
             <Stack.Screen name="Scan Screen" component={ScanScreen} />
             <Stack.Screen name="List Screen" component={ListScreen} />
+            <Stack.Screen name="theItem" component={ItemScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>

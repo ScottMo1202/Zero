@@ -85,7 +85,7 @@ function getHeaderTitle(route) {
     case 'Scan':
       return 'Scan your product';
     case 'List':
-      return 'Prudct list'
+      return 'Product list'
     case 'Profile': 
       return 'Profile'
   }

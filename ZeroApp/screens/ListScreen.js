@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, TouchableOpacity, Keyboard, UIManager, Animated} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity} from 'react-native';
 import firebase from '../components/firebase'
 import { render } from 'react-dom';
 
@@ -8,6 +8,7 @@ export default class ListScreen extends React.Component {
     super(props);
     const currUser = firebase.auth().currentUser;
 
+    this.viewItem = this.viewItem.bind(this);
     this.state = {
       text: 'Search',
       currentUser: currUser ? currUser.uid : "None",
@@ -22,12 +23,23 @@ export default class ListScreen extends React.Component {
       let value = content.val();
       this.setState({currItems: value})
     });
+    this.itemsRef.on('child_removed', (content) => {
+      let value = content.val();
+      this.setState({currItems: value})
+    });
   }
 
   // the function to stop fetching data from firebase
   componentWillUnmount() {
     this.itemsRef.off();
   } 
+
+  viewItem(title, category) {
+    this.props.navigation.navigate('theItem', {
+      title: title,
+      category: category
+    })
+  }
 
   render() {
     // if the user has not stored any item
@@ -80,13 +92,17 @@ export default class ListScreen extends React.Component {
     // if the users has some items
     // show all the items
     let eachItem = displayedItems.map((eachItem) => {
-      return <ItemInfo key={eachItem.id} 
-                        itemName={eachItem.title} 
-                        categName={eachItem.category} 
-                        note={eachItem.note}
-                        purchaseDate={eachItem.purchaseDate}
-                        expireDate={eachItem.expireDate}
-              />
+      console.log("List")
+      console.log(eachItem.id)
+      return <ItemInfo    navi = {this.props.navigation}
+                          theKey={eachItem.id} 
+                          user={this.state.currentUser}
+                          itemName={eachItem.title} 
+                          categName={eachItem.category} 
+                          note={eachItem.note}
+                          purchaseDate={eachItem.purchaseDate}
+                          expireDate={eachItem.expireDate}
+                />
     });
 
     return (
@@ -116,23 +132,42 @@ export default class ListScreen extends React.Component {
 }
 
 // for each displayed item
-class ItemInfo extends React.Component {
+class ItemInfo extends ListScreen {
+  constructor(props) {
+    super(props)
+  }
+  viewItem() {
+    console.log('Hello'); 
+  }
   render() {
     const dateDiff = new Date(this.props.expireDate).getTime() - new Date().getTime(); 
     const daysDiff = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
     
     return (
-      <View style={styles.itemContainer}>
-          <View style={styles.itemColumn}>
-          <Text style={styles.itemTitleText}>{this.props.itemName}</Text>
-          <Text style={styles.itemCategoryText}>{this.props.categName}</Text>
-          <Text style={styles.itemNoteText}>{this.props.note}</Text>
-          <Text style={styles.itemCategoryText}>{this.props.expireDate}</Text>
-          </View>
-          <View style={styles.itemColumn}>
-              <Text style={styles.bigDateText}>{daysDiff}<Text style={styles.smallDateText}>d</Text></Text>
-          </View>
-      </View>
+      <TouchableOpacity onPress={() => { this.props.navi.navigate('theItem', {
+        user: this.props.user,
+        theKey: this.props.theKey,
+        title: this.props.itemName,
+        category: this.props.categName,
+        num: daysDiff,
+        unit: 'day',
+        expireDate: this.props.expireDate,
+        purchaseDate: this.props.purchaseDate,
+        note: this.props.note
+      })}}>
+        <View style={styles.itemContainer}>
+
+            <View style={styles.itemColumn}>
+            <Text style={styles.itemTitleText}>{this.props.itemName}</Text>
+            <Text style={styles.itemCategoryText}>{this.props.categName}</Text>
+            <Text style={styles.itemNoteText}>{this.props.note}</Text>
+            <Text style={styles.itemCategoryText}>{this.props.expireDate}</Text>
+            </View>
+            <View style={styles.itemColumn}>
+                <Text style={styles.bigDateText}>{daysDiff}<Text style={styles.smallDateText}>d</Text></Text>
+            </View>
+        </View>
+      </TouchableOpacity>
     );
   }
 }

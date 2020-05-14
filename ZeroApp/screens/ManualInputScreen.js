@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, DatePickerIOS, Button, TouchableOpacity, Keyboard, UIManager, Animated} from 'react-native';
 import GradientButton from 'react-native-gradient-buttons';
+import {Notifications} from 'expo';
 import RNPickerSelect from 'react-native-picker-select'
 import * as Font from 'expo-font';
 import * as FoodDB from '../assets/json/food.json'
 import Fuse from 'fuse.js'
+import moment from 'moment'
 import * as MakeupDB from '../assets/json/makeup.json'
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 import firebase from '../components/firebase'
 const FoodDB2 = FoodDB.Sheet2;
 
@@ -38,6 +42,17 @@ export default class ManualInputScreen extends React.Component {
     this.submitItemInfo = this.submitItemInfo.bind(this);
   }
 
+  handleNotification() {
+    console.warn('ok! got your notif');
+  }
+
+  askNotification = async () => {
+    // We need to ask for Notification permissions for ios devices
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (Constants.isDevice && status === 'granted')
+      console.log('Notification permissions granted.');
+  };
+
   async componentDidMount() {
     // fetch group data from firebase
     this.itemsRef = firebase.database().ref('items');
@@ -47,6 +62,8 @@ export default class ManualInputScreen extends React.Component {
       'muli-regular': require('../assets/fonts/Muli-Regular.ttf')
     });
     this.setState({assetsLoaded: true})
+    this.askNotification();
+    Notifications.addListener(this.handleNotification);
   }
 
   componentWillMount() {
@@ -130,7 +147,17 @@ export default class ManualInputScreen extends React.Component {
     }
     // push the new item to firebase db
     itemsRef.push(newItem);
-    
+
+    const localNotification = {
+      title: this.state.title,
+      sound: true,
+      body: 'Your ' + this.state.title + "is going to expire soon!"
+    };
+
+    console.log(this.state.expireDate)
+    const expireDate = moment(this.state.expireDate).format();
+    // const time = moment(expireDate, "YYYYMMDD").fromNow(); 
+    console.log(expireDate)
     //empty out for next time
     this.setState({
       currentUser: currUser ? currUser.uid : "None",
@@ -140,6 +167,21 @@ export default class ManualInputScreen extends React.Component {
       category: "",
       note: ""
     });
+
+    // const schedulingOptions = {
+    //   time: expireDate
+    // }
+    const schedulingOptions = {
+      time: (new Date()).getTime() + 3000
+    };
+
+    console.log(schedulingOptions)
+
+    // Notifications show only when app is not active.
+    // (ie. another app being used or device's screen is locked)
+    Notifications.scheduleLocalNotificationAsync(
+        localNotification, schedulingOptions
+    );
 
     alert('You have saved the new item!')
   }

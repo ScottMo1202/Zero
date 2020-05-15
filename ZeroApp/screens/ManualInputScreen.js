@@ -151,7 +151,7 @@ export default class ManualInputScreen extends React.Component {
     const localNotification = {
       title: this.state.title,
       sound: true,
-      body: 'Your ' + this.state.title + "is going to expire soon!"
+      body: 'Your ' + this.state.title + " is going to expire soon!"
     };
 
     console.log(this.state.expireDate)
@@ -172,7 +172,7 @@ export default class ManualInputScreen extends React.Component {
     //   time: expireDate
     // }
     const schedulingOptions = {
-      time: (new Date()).getTime() + 3000
+      time: (new Date()).getTime() + 5000
     };
 
     console.log(schedulingOptions)
@@ -218,8 +218,6 @@ export default class ManualInputScreen extends React.Component {
     if (result.length === 0){
       return null;
     }
-
-    console.log(result)
 
     if (this.state.storingOption === "Room Temprature"){
       return result[0].item.room_temp;
